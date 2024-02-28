@@ -1,0 +1,72 @@
+//
+//  NotificationDetailView.swift
+//  tracker_ios_app
+//
+//  Created by macbook on 26/2/2024.
+//
+
+import SwiftUI
+
+struct NotificationDetailView: View {
+    @EnvironmentObject var notificationViewModel: NotificationViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
+    var notification: Notification
+    var dateFormatter: DateFormatter
+    
+    init(notification: Notification) {
+        self.notification = notification
+        
+        dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMMM yyyy (EEEE) HH:mm:ss"
+    }
+    
+    var body: some View {
+        VStack {
+            Text("\(notification.title)")
+            Text("At: \(dateFormatter.string(from: notification.time))")
+            Divider()
+            Text("\(notification.content)")
+            
+            
+            switch notification.type {
+                case .invitationReceived:
+                    HStack {
+                        Button {
+//                            notificationViewModel.acceptFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.id)
+                            notificationViewModel.acceptFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
+//                            userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.id)
+                            userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
+                            
+                            notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+                        } label: {
+                            Text("Accept")
+                        }
+                        .disabled(notification.actionTaken!)
+                        
+                        Button {
+//                            notificationViewModel.rejectFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.id)
+                            notificationViewModel.rejectFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
+                            
+                            notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+                        } label: {
+                            Text("Reject")
+                        }
+                        .disabled(notification.actionTaken!)
+                    }
+                default:
+                    EmptyView()
+                }
+        }
+        .onAppear() {
+            print("read")
+//            notificationViewModel.notificationRead(notificationId: notification.id!)
+            if !notification.read {
+                notificationViewModel.notificationRead(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+            }
+        }
+    }
+}
+
+//#Preview {
+//    NotificationDetailView()
+//}
