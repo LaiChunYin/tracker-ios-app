@@ -21,8 +21,7 @@ struct FollowingListView: View {
                 else{
                     List {
                         ForEach(followings, id: \.self) { follower in
-                            //                        FriendListItemView(user: follower)
-                            FindUserView(user: follower, icon: "location.magnifyingglass")
+                            FriendListItemView(user: follower, icon: "location.magnifyingglass")
                         }
                         .onDelete { indexSet in
                             print("deleting \(indexSet)")

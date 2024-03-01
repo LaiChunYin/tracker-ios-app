@@ -8,14 +8,40 @@
 import SwiftUI
 
 struct FriendListItemView: View {
-    var user: String
-    
-    init(user: String) {
-        self.user = user
-    }
+    var user: String = ""
+    var icon: String
     
     var body: some View {
-        Text("\(user)")
+        VStack{
+            
+            HStack {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
+                    
+                    Text(user)
+                }
+                Spacer()
+                
+                Image(systemName: icon)
+                    .font(.title)
+                    .foregroundColor(.green)
+            }
+            .padding(.vertical, 5)
+            
+            HStack {
+                Text("id: #12003")
+                    .font(.caption)
+                    .foregroundStyle(.gray)
+                
+                Spacer()
+                
+                Text("joined: 12-1-2024")
+                    .font(.caption)
+                    .foregroundStyle(.gray)
+            }
+        }
     }
 }
 
