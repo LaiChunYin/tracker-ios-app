@@ -68,8 +68,6 @@ struct MapView: View {
                     }
         }
     }
-    
-        
 }
 
 

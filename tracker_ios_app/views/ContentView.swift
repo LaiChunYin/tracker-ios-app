@@ -35,6 +35,11 @@ struct ContentView: View {
                                 notificationViewModel.testing(receiverId: userViewModel.currentUser!.identifier)
                             } label: {
                                 Image(systemName: "exclamationmark.octagon")
+                                    .foregroundColor(.red)
+                                    .fontWeight(.bold)
+                                    .padding(4)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(.circle)
                             }
                             
                             Button {
@@ -42,6 +47,9 @@ struct ContentView: View {
                                 showAddFriendForm.toggle()
                             } label: {
                                 Image(systemName: "person.badge.plus.fill")
+                                    .padding(4)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(.circle)
                             }
                             .sheet(isPresented: $showAddFriendForm) {
                                 AddFriendView(showAddFriendForm: $showAddFriendForm)
@@ -55,6 +63,9 @@ struct ContentView: View {
                                     rootScreen = .notifications
                                 } label: {
                                     Image(systemName: "bell.fill")
+                                        .padding(4)
+                                        .background(.ultraThinMaterial)
+                                        .clipShape(.circle)
                                 }
                             case .notifications:
                                 Button {
@@ -62,6 +73,9 @@ struct ContentView: View {
                                     rootScreen = .main
                                 } label: {
                                     Image(systemName: "house.fill")
+                                        .padding(4)
+                                        .background(.ultraThinMaterial)
+                                        .clipShape(.circle)
                                 }
                             }
                             
