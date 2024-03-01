@@ -7,54 +7,61 @@
 
 import SwiftUI
 
+
 struct FollowedByListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followedBy: [String] = []
-//    @State private var isFollowedBy: Bool = false
-    
+    @State var followedBy: [String] = []
+    @State var isFollowedByNone: Bool = false
+
     var body: some View {
         NavigationView {
-           
+
             VStack {
-                List {
-                    ForEach(followedBy, id: \.self) { followedBy in
-                        FindUserView(user: followedBy, icon: "location.fill")
+                
+                if(isFollowedByNone){
+                    Text("Not followed by anyone yet 🙂")
+                }
+                else{
+                    List {
+                        ForEach(followedBy, id: \.self) { followedBy in
+                            FindUserView(user: followedBy, icon: "location.fill")
+                        }
+                        .onDelete { indexSet in
+                            print("deleting \(indexSet)")
+                            for index in indexSet {
+                                let userToBeDelete = followedBy[index]
+                                userViewModel.unfollow(followerId: userToBeDelete, targetId: userViewModel.currentUser!.identifier)
+                                followedBy.remove(at: index)
+                                
+                                let notification = Notification(type: .subscriberRemoved, extraData: ["target": userToBeDelete])
+                                userViewModel.sendNotification(receiverId: userToBeDelete, notification: notification)
+                            }
+                        }
                     }
-                    .onDelete { indexSet in
-                        print("deleting \(indexSet)")
-                        for index in indexSet {
-                            let userToBeDelete = followedBy[index]
-                            userViewModel.unfollow(followerId: userToBeDelete, targetId: userViewModel.currentUser!.identifier)
-                            followedBy.remove(at: index)
-                            
-                            let notification = Notification(type: .subscriberRemoved, extraData: ["target": userToBeDelete])
-                            userViewModel.sendNotification(receiverId: userToBeDelete, notification: notification)
+                    .navigationTitle("Fb page") //Followed By
+                    .onAppear() {
+                        followedBy = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+                        if(followedBy.isEmpty){
+                            isFollowedByNone = true
+                        }else{
+                            isFollowedByNone = false
                         }
                     }
                 }
             }
-            .navigationTitle("Fb page") //Followed By
-            .onAppear() {
-                followedBy = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
-//                if(followedBy.isEmpty){
-//                    isFollowedBy = true
-//                }
-//                else{
-//                    isFollowedBy = false
-//                }
-            }
         }
-//            if(isFollowedBy){
-//                VStack(alignment: .center){
-//                    Text("Not followed by anyone yet 🙂")
-//                }
-//            }
+           
     }
 }
 
-//#Preview {
-//    FollowedByListView()
-//}
+
+#Preview {
+    FollowedByListView(followedBy:
+//                        ["user1"]
+                       []
+    )
+        .preferredColorScheme(.dark)
+}
 
 
 struct FindUserView: View {
@@ -80,8 +87,6 @@ struct FindUserView: View {
             }
             .padding(.vertical, 5)
             
-//            Divider()
-            
             HStack {
                 Text("id: #12003")
                     .font(.caption)
@@ -96,3 +101,10 @@ struct FindUserView: View {
         }
     }
 }
+
+
+
+
+
+
+
