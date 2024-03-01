@@ -69,11 +69,11 @@ struct tracker_ios_app: App {
         
         self.preferenceService = PreferenceService()
         self.notificationService = NotificationService(notificationRepository: notificationRepository)
-        self.userService = UserService(userRepository: userRepository, notificationService: notificationService)
         self.authenticationService = AuthenticationService(preferenceService: preferenceService, notificationService: notificationService, userRepository: userRepository, notificationRepository: notificationRepository)
+        self.userService = UserService(userRepository: userRepository, authenticationService: authenticationService, notificationService: notificationService)
         
         self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService)
-        self.notificationViewModel = NotificationViewModel(notificationService: notificationService, authenticationService: authenticationService)
+        self.notificationViewModel = NotificationViewModel(userService: userService, notificationService: notificationService, authenticationService: authenticationService)
     }
     
     @Environment(\.scenePhase) var scenePhase
@@ -85,11 +85,6 @@ struct tracker_ios_app: App {
             switch scenePhase {
                 case .active:
                     print("active app")
-//                    guard preferenceService.isRememberLoginStatus else {
-//                        print("require to login again")
-//                        userViewModel.logout()
-//                        return
-//                    }
                 default:
                     print("not active app")
                     guard preferenceService.isRememberLoginStatus else {

@@ -12,6 +12,7 @@ struct NotificationDetailView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     var notification: Notification
     var dateFormatter: DateFormatter
+    @State private var errorType: UserError? = nil
     
     init(notification: Notification) {
         self.notification = notification
@@ -32,13 +33,34 @@ struct NotificationDetailView: View {
                 case .invitationReceived:
                     HStack {
                         Button {
-                            userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
-                            
-                            notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+                            do {
+                                try userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
+                                
+                                notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+                            }
+                            catch let error as UserError {
+                                print("error notification detail view \(error)")
+                                errorType = error
+                            }
+                            catch let error {
+                                errorType = .unknown
+                            }
                         } label: {
                             Text("Accept")
                         }
                         .disabled(notification.actionTaken!)
+                        .alert(item: $errorType){ error in
+                            let errMsg: String
+                            switch error {
+                            case .alreadyFollowed:
+                                errMsg = "You have already followed this user"
+                            case .invalidUser:
+                                errMsg = "User not Found"
+                            default:
+                                errMsg = "Unknown error"
+                            }
+                            return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
+                        }
                         
                         Button {
                             notificationViewModel.rejectFollowRequest(from: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)

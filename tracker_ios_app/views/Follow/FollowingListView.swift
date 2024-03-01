@@ -10,6 +10,7 @@ import SwiftUI
 struct FollowingListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var followers: [String] = []
+    @State private var errorType: UserError? = nil
     
     var body: some View {
         NavigationView {
@@ -21,11 +22,33 @@ struct FollowingListView: View {
                     .onDelete { indexSet in
                         print("deleting \(indexSet)")
                         for index in indexSet {
-                            let userToBeDelete = followers[index]
-                            userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDelete, isRemoveingFollower: false)
-                            followers.remove(at: index)
+                            let userToBeDeleted = followers[index]
+                            
+                            do {
+                                try userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
+                                followers.remove(at: index)
+                            }
+                            catch let error as UserError {
+                                errorType = error
+                            }
+                            catch let error {
+                                print("error in following list view \(error)")
+                                errorType = .unknown
+                            }
                             
                         }
+                    }
+                    .alert(item: $errorType){ error in
+                        let errMsg: String
+                        switch error {
+                        case .notFollowing:
+                            errMsg = "You are not following this user"
+                        case .invalidUser:
+                            errMsg = "User not Found"
+                        default:
+                            errMsg = "Unknown error"
+                        }
+                        return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
                     }
                 }
             }

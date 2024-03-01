@@ -10,16 +10,20 @@ import FirebaseFirestore
 
 class NotificationViewModel: ObservableObject, NotificationInitDelegate, NotificationServiceDelegate {
     @Published var notifications: [Notification] = []
+    private var userService: UserService
     private var notificationService: NotificationService
     private var authenticationService: AuthenticationService
+    weak var userDataValidationDelegate: UserDataValidationDelegate?
     
     
-    init(notificationService: NotificationService, authenticationService: AuthenticationService) {
+    init(userService: UserService, notificationService: NotificationService, authenticationService: AuthenticationService) {
+        self.userService = userService
         self.notificationService = notificationService
         self.authenticationService = authenticationService
         
         self.notificationService.notificationServiceDelegate = self
         self.authenticationService.notificationInitDelegate = self
+        self.userDataValidationDelegate = userService
     }
         
     func onNotificationInit() {
@@ -64,15 +68,30 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
         }
     }
     
-    func requestFollow(target: String, by: String) {
+    func requestFollow(target: String, by: String) async throws {
         guard target != by else {
             print("cannot follow yourself")
-            return
+            throw UserError.cannotBeYourself
         }
         
         guard !target.isEmpty else {
             print("target cannot be empty")
-            return
+            throw UserError.invalidUser
+        }
+        
+        print("target before \(target)")
+        let target = target.lowercased()
+        print("target after \(target)")
+        
+        // TODO: check if the target user exist
+        guard await userService.checkUserExistence(userId: target) else {
+            print("in notification view model, user does not exist")
+            throw UserError.invalidUser
+        }
+        
+        // TODO: check if the target is already followed
+        guard !userDataValidationDelegate!.isCurrentUserFollowing(userId: target) else {
+            throw UserError.alreadyFollowed
         }
         
         notificationService.sendRequestSentNotification(receiverId: by, by: target)

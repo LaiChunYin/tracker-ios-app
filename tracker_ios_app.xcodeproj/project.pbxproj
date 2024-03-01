@@ -42,6 +42,8 @@
 		FA45FFB42B8CF44900A126A6 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FFB32B8CF44900A126A6 /* NotificationRepository.swift */; };
 		FA4B0BE62B8D836200F94CAB /* NotificationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4B0BE52B8D836200F94CAB /* NotificationDetailView.swift */; };
 		FA8673E62B9171DB005E5888 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E52B9171DB005E5888 /* UserService.swift */; };
+		FA8673E82B9264C1005E5888 /* ErrorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E72B9264C1005E5888 /* ErrorHelper.swift */; };
+		FA8673EA2B92653B005E5888 /* protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E92B92653B005E5888 /* protocols.swift */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +100,8 @@
 		FA45FFB32B8CF44900A126A6 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
 		FA4B0BE52B8D836200F94CAB /* NotificationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailView.swift; sourceTree = "<group>"; };
 		FA8673E52B9171DB005E5888 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		FA8673E72B9264C1005E5888 /* ErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHelper.swift; sourceTree = "<group>"; };
+		FA8673E92B92653B005E5888 /* protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocols.swift; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -247,7 +251,9 @@
 			isa = PBXGroup;
 			children = (
 				FA45FF972B8A9EC300A126A6 /* Constants.swift */,
+				FA8673E72B9264C1005E5888 /* ErrorHelper.swift */,
 				FA45FFB12B8BFE8F00A126A6 /* Extensions.swift */,
+				FA8673E92B92653B005E5888 /* protocols.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -442,12 +448,14 @@
 				FA45FFAC2B8BE0A700A126A6 /* PreferenceService.swift in Sources */,
 				FA45FFA22B8BB3FE00A126A6 /* NotificationViewModel.swift in Sources */,
 				FA45FF362B87C72F00A126A6 /* AuthenticationService.swift in Sources */,
+				FA8673EA2B92653B005E5888 /* protocols.swift in Sources */,
 				FA45FF262B870F8500A126A6 /* LoginView.swift in Sources */,
 				FA45FF952B8A539400A126A6 /* UserData.swift in Sources */,
 				FA45FF982B8A9EC300A126A6 /* Constants.swift in Sources */,
 				FA45FF9C2B8AA89500A126A6 /* UserViewModel.swift in Sources */,
 				FA45FF2E2B870FAD00A126A6 /* FollowingListView.swift in Sources */,
 				FA45FF9A2B8AA62500A126A6 /* NotificationListView.swift in Sources */,
+				FA8673E82B9264C1005E5888 /* ErrorHelper.swift in Sources */,
 				FA4B0BE62B8D836200F94CAB /* NotificationDetailView.swift in Sources */,
 				FA45FF302B87165700A126A6 /* UserDetailView.swift in Sources */,
 				FA45FEF92B870E4100A126A6 /* ContentView.swift in Sources */,

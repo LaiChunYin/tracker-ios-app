@@ -46,7 +46,7 @@ struct ContentView: View {
                             .sheet(isPresented: $showAddFriendForm) {
                                 AddFriendView(showAddFriendForm: $showAddFriendForm)
                             }
-                            .presentationDetents([.fraction(0.5)])
+                            .presentationDetents([.fraction(0.1)])
                             
                             switch rootScreen {
                             case .main:

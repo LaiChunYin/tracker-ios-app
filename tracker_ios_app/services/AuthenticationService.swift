@@ -36,14 +36,12 @@ class AuthenticationService {
                 notificationService.sendNewAccountNotification(receiverId: identifier)
                 self.currentUser = AppUser(accountData: userAccount, userData: UserData())
                 print("current user is \(identifier)")
-//                authServiceDelegate?.onUserInit(user: self.currentUser!)
-//                notificationInitDelegate?.onNotificationInit()
-                
                 self.initializeData(user: self.currentUser!)
             }
         }
         catch let error as NSError {
-            print("error in creating appuser")
+            print("error in sign up \(error)")
+            throw error
         }
     }
     
@@ -74,9 +72,14 @@ class AuthenticationService {
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
-                if let error = error as? NSError {
-                    print("sign in error is \(error)")
-                    continuation.resume(throwing: error)
+//                if let error = error as? NSError {
+//                    print("sign in error is \(error)")
+//                    continuation.resume(throwing: error)
+//                    return
+//                }
+                if let error = error, let customError = translateFirebaseAuthError(error: error) {
+                    print("sign in error is \(customError)")
+                    continuation.resume(throwing: customError)
                     return
                 }
                 
@@ -91,11 +94,7 @@ class AuthenticationService {
                             self!.currentUser = AppUser(accountData: userAccount)
                             
                             self!.initializeData(user: self!.currentUser!)
-//                            self!.authServiceDelegate?.onUserInit(user: self!.currentUser!)
-//                            
-//                            self!.userListener = self!.userRepository.listenToUserChanges(userId: self!.currentUser!.identifier)
-//                            
-//                            self!.notificationsListener = self!.notificationRepository.listenToNotificationChanges(userId: self!.currentUser!.identifier)
+
                         }
                         continuation.resume(returning: ())
                 }

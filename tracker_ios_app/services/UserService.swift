@@ -8,20 +8,32 @@
 import Foundation
 import FirebaseFirestore
 
-class UserService: UserRepositoryDelegate {
+class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidationDelegate {
     weak var userServiceDelegate: UserServiceDelegate?
+    private var authenticationService: AuthenticationService
     private var userRepository: UserRepository
     private var notificationService: NotificationService
+    private var currentUser: AppUser? = nil
     
-    init(userRepository: UserRepository, notificationService: NotificationService) {
+    init(userRepository: UserRepository, authenticationService: AuthenticationService, notificationService: NotificationService) {
         self.userRepository = userRepository
+        self.authenticationService = authenticationService
         self.notificationService = notificationService
         
         self.userRepository.userRepositoryDelegate = self
+        self.authenticationService.authServiceDelegate = self
     }
 
+    
+    func onUserInit(user: AppUser) {
+        print("in auth service update user on change")
+        self.currentUser = user
+        userServiceDelegate?.onUserInit(user: user)
+    }
+    
     func onUserUpdate(userData: UserData) {
         print("in auth service update user on change")
+        self.currentUser?.userData = userData
         userServiceDelegate?.onUserUpdate(userData: userData)
     }
     
@@ -43,5 +55,27 @@ class UserService: UserRepositoryDelegate {
         if isRemovingFollower {
             notificationService.sendRemovedNotification(receiverId: followerId, by: targetId)
         }
+    }
+    
+    func isCurrentUserFollowing(userId: String) -> Bool {
+        if self.currentUser!.userData!.following.keys.contains(userId) {
+            print("already following")
+            return true
+        }
+        print("not already following")
+        return false
+    }
+    
+    func isCurrentUserFollowedBy(userId: String) -> Bool {
+        if self.currentUser!.userData!.followedBy.keys.contains(userId) {
+            print("already followed by")
+            return true
+        }
+        print("not already followed by")
+        return false
+    }
+    
+    func checkUserExistence(userId: String) async -> Bool {
+        return await userRepository.isUserExist(userId: userId)
     }
 }

@@ -87,7 +87,7 @@ struct LoginView: View {
                         case .invalidUser, .wrongPwd:
                             errMsg = "Invalid username or password."
                         default:
-                            errMsg = "Unknowm error"
+                            errMsg = "Unknown error"
                         }
                         return Alert(title: Text("Login Failed"), message: Text(errMsg))
                     }

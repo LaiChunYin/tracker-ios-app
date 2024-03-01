@@ -18,7 +18,6 @@ class UserRepository {
     }
     
     func listenToUserChanges(userId: String) -> ListenerRegistration {
-//        try await withCheckedContinuation { continuation in
             let userDocRef = self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId)
             print("adding listener to user data")
             
@@ -38,8 +37,6 @@ class UserRepository {
             }
         
             return userListener
-//            continuation.resume(returning: userListener)
-//        }
     }
     
     func createNewUserDataStorage(userId: String) async throws {
@@ -63,4 +60,21 @@ class UserRepository {
         self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).updateData(newData)
     }
 
+    func isUserExist(userId: String) async -> Bool {
+        do {
+            let document = try await self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).getDocument()
+            
+            if document.exists {
+                print("user exist")
+                return true
+            } else {
+                print("user does not exist")
+                return false
+            }
+        }
+        catch let error {
+            print("user does not exist: \(error)")
+            return false
+        }
+    }
 }

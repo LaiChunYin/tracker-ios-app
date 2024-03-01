@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 
-class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate {
+class UserViewModel: ObservableObject, UserServiceDelegate {
     private var authenticationService: AuthenticationService
     private var preferenceService: PreferenceService
     private var userService: UserService
@@ -24,7 +24,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate 
         self.preferenceService = preferenceService
         self.userService = userService
         
-        self.authenticationService.authServiceDelegate = self
+//        self.authenticationService.authServiceDelegate = self
         self.userService.userServiceDelegate = self
     }
     
@@ -49,12 +49,17 @@ class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate 
             throw LoginError.emptyUsernameOrPwd
         }
         
+        // TODO: check wrong password
+        
+        // TODO: check invalid user
+        
         do {
             try await authenticationService.signIn(email: email, password: password)
             self.preferenceService.isRememberLoginStatus = rememberMe
         }
         catch let error as NSError {
             print("error in login \(error)")
+            throw error
         }
     }
     
@@ -86,6 +91,12 @@ class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate 
 //            return .failure(SignUpError.alreadyExist)
 //        }
         
+        // TODO: check if user already exist
+        guard !(await userService.checkUserExistence(userId: email)) else {
+            print("user already exist")
+            throw SignUpError.alreadyExist
+        }
+        
         print("\(#function), \(email), \(password)")
               
         do {
@@ -93,12 +104,18 @@ class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate 
         }
         catch let error as NSError {
             print("error in sign up \(error)")
+            throw error
         }
     }
     
     
     
-    func follow(followerId: String, targetId: String) {
+    func follow(followerId: String, targetId: String) throws {
+        // TODO: check if the target is already followed
+        guard !userService.isCurrentUserFollowedBy(userId: followerId) else {
+            throw UserError.alreadyFollowed
+        }
+
         userService.follow(followerId: followerId, targetId: targetId)
         
         if var following = currentUser?.userData?.following {
@@ -107,8 +124,17 @@ class UserViewModel: ObservableObject, UserServiceDelegate, AuthServiceDelegate 
         }
     }
     
-    func unfollow(followerId: String, targetId: String, isRemoveingFollower: Bool) {
-        userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemoveingFollower)
+    func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) throws {
+        // TODO: check if the target is already unfollowed
+        guard !isRemovingFollower || userService.isCurrentUserFollowedBy(userId: followerId) else {
+            throw UserError.notFollowing
+        }
+
+        guard isRemovingFollower || userService.isCurrentUserFollowing(userId: targetId) else {
+            throw UserError.notFollowedBy
+        }
+        
+        userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemovingFollower)
         
         if var following = currentUser?.userData?.following {
             following.removeValue(forKey: targetId)
