@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 enum LoginError: Error, Identifiable {
     var id: Self {self}
@@ -13,6 +14,8 @@ enum LoginError: Error, Identifiable {
     case emptyUsernameOrPwd
     case invalidUser
     case wrongPwd
+//    case FireAuthError(Error)
+    case unknown
 }
 
 enum SignUpError: Error,Identifiable {
@@ -22,6 +25,7 @@ enum SignUpError: Error,Identifiable {
     case weakPassword
     case confirmPwdNotMatch
     case emptyInputs
+    case unknown
 }
 
 enum NotificationTypes: Codable {
@@ -53,3 +57,35 @@ struct UserDataSubcollections {
 }
 
 
+protocol AuthServiceDelegate: AnyObject {
+    func onUserInit(user: AppUser)
+}
+
+protocol NotificationInitDelegate: AnyObject {
+    func onNotificationInit()
+}
+
+protocol UserServiceDelegate: AnyObject {
+    func onUserUpdate(userData: UserData)
+}
+
+protocol NotificationServiceDelegate: AnyObject {
+//    func updateNotificationOnChange(notificationId: String, notification: Notification)
+    func onNotificationAdded(notificationId: String, notification: Notification)
+    func onNotificationUpdated(notificationId: String, notification: Notification)
+    func onNotificationRemoved(notificationId: String, notification: Notification)
+}
+
+protocol UserRepositoryDelegate: AnyObject {
+    func onUserUpdate(userData: UserData)
+}
+
+enum NotificationChangeType {
+    case added
+    case updated
+    case removed
+}
+
+protocol NotificationRepositoryDelegate: AnyObject {
+    func onNotificationChange(type: NotificationChangeType, notificationId: String, notification: Notification)
+}

@@ -12,6 +12,7 @@ struct SignUpView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
+    @State private var signUpError: SignUpError? = nil
     
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
@@ -49,7 +50,18 @@ struct SignUpView: View {
                 .padding()
             
             Button {
-                userViewModel.createAccount(email: email, password: password, confirmPassword: confirmPassword)
+                Task {
+                    do {
+                        try await userViewModel.signUp(email: email, password: password, confirmPassword: confirmPassword)
+                    }
+                    catch let error as SignUpError {
+                        signUpError = error
+                    }
+                    catch {
+                        print("unknown error")
+                        signUpError = .unknown
+                    }
+                }
             } label: {
                 Text("Create Account")
                     .foregroundColor(.white)
@@ -58,6 +70,22 @@ struct SignUpView: View {
                     .padding(10)
                     .background(Color.green)
                     .cornerRadius(10)
+            }
+            .alert(item: $signUpError) { error in
+                let errMsg: String
+                switch error {
+                    case .alreadyExist:
+                        errMsg = "The username is already used."
+                    case .weakPassword:
+                        errMsg = "Password is too weak."
+                    case .confirmPwdNotMatch:
+                        errMsg = "Password does not match with the confirm password."
+                    case .emptyInputs:
+                        errMsg = "All input fields are mandatory."
+                    default:
+                        errMsg = "Unknown error"
+                }
+                return Alert(title: Text("Sign Up Failed"), message: Text(errMsg))
             }
 
         }

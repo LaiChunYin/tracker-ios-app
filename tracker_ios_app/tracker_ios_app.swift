@@ -40,42 +40,40 @@ import FirebaseFirestore
 
 @main
 struct tracker_ios_app: App {
-//    let db = Firestore.firestore()
-//    let userRepository = UserRepository(db: db)
-//    
-//    let authenticationService = AuthenticationService(userRepository: userRepository)
-//    let preferenceService = PreferenceService()
-//    let notificationService = NotificationService()
-//    let weatherService = WeatherService()
-//   
-//    let userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userRepository: userRepository)
-//    let NotificationViewModel = NotificationViewModel()
-    
     private let db: Firestore
-    private let userRepository: UserRepository
     
-//    private let authenticationService: AuthenticationService
+    private let userRepository: UserRepository
+    private let notificationRepository: NotificationRepository
+    
+    private let authenticationService: AuthenticationService
+    private let userService: UserService
     private let preferenceService: PreferenceService
-//    private let notificationService: NotificationService
+    private let notificationService: NotificationService
 //    private let weatherService: WeatherService
-   
+    
     private let userViewModel: UserViewModel
     private let notificationViewModel: NotificationViewModel
     
     init() {
         FirebaseApp.configure()
         
+//        self.db = Firestore.firestore()
+//        self.userRepository = UserRepository(db: db)
+//        self.preferenceService = PreferenceService()
+//        self.userViewModel = UserViewModel(db: db, preferenceService: preferenceService)
+//        self.notificationViewModel = NotificationViewModel(db: db, userViewModel: userViewModel)
+        
         self.db = Firestore.firestore()
         self.userRepository = UserRepository(db: db)
+        self.notificationRepository = NotificationRepository(db: db)
         
-//        self.authenticationService = AuthenticationService(userRepository: userRepository)
         self.preferenceService = PreferenceService()
-//        self.notificationService = NotificationService()
-//        self.weatherService = WeatherService()
-       
-//        self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userRepository: userRepository)
-        self.userViewModel = UserViewModel(db: db, preferenceService: preferenceService)
-        self.notificationViewModel = NotificationViewModel(db: db, userViewModel: userViewModel)
+        self.notificationService = NotificationService(notificationRepository: notificationRepository)
+        self.userService = UserService(userRepository: userRepository, notificationService: notificationService)
+        self.authenticationService = AuthenticationService(preferenceService: preferenceService, notificationService: notificationService, userRepository: userRepository, notificationRepository: notificationRepository)
+        
+        self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService)
+        self.notificationViewModel = NotificationViewModel(notificationService: notificationService, authenticationService: authenticationService)
     }
     
     @Environment(\.scenePhase) var scenePhase

@@ -30,7 +30,8 @@ struct MainView: View {
                     Text("Followed By")
                 }
             }
-
+            .navigationTitle(userViewModel.currentUser != nil ? "Welcome, \(userViewModel.currentUser!.identifier)" : "Logging out")
+            .navigationBarTitleDisplayMode(.inline)
         }
 
 

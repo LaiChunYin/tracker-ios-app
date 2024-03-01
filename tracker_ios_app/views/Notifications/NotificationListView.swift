@@ -16,7 +16,8 @@ struct NotificationListView: View {
 //        NavigationView {
         VStack {
 //            List(notificationViewModel.notifications ?? []) { notification in
-            List(userViewModel.currentUser?.notifications.sorted { $0.time > $1.time } ?? []) { notification in
+//            List(userViewModel.currentUser?.notifications.sorted { $0.time > $1.time } ?? []) { notification in
+            List(notificationViewModel.notifications.sorted { $0.time > $1.time }) { notification in
                 NavigationLink {
                     NotificationDetailView(notification: notification).environmentObject(notificationViewModel).environmentObject(userViewModel)
                 } label: {
@@ -29,7 +30,8 @@ struct NotificationListView: View {
             }
             .onAppear() {
 //                print("current user \(userViewModel.currentUser?.id), \(userViewModel.currentUser?.notifications)")
-                print("current user \(userViewModel.currentUser?.identifier), \(userViewModel.currentUser?.notifications)")
+//                print("current user \(userViewModel.currentUser?.identifier), \(userViewModel.currentUser?.notifications)")
+                print("current user \(notificationViewModel.notifications)")
             }
             
         }

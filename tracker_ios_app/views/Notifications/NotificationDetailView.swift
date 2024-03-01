@@ -32,9 +32,6 @@ struct NotificationDetailView: View {
                 case .invitationReceived:
                     HStack {
                         Button {
-//                            notificationViewModel.acceptFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.id)
-                            notificationViewModel.acceptFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
-//                            userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.id)
                             userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
                             
                             notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
@@ -44,8 +41,7 @@ struct NotificationDetailView: View {
                         .disabled(notification.actionTaken!)
                         
                         Button {
-//                            notificationViewModel.rejectFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.id)
-                            notificationViewModel.rejectFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
+                            notificationViewModel.rejectFollowRequest(from: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
                             
                             notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
                         } label: {

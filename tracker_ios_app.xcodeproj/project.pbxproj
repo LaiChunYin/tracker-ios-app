@@ -41,6 +41,7 @@
 		FA45FFB22B8BFE8F00A126A6 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FFB12B8BFE8F00A126A6 /* Extensions.swift */; };
 		FA45FFB42B8CF44900A126A6 /* NotificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FFB32B8CF44900A126A6 /* NotificationRepository.swift */; };
 		FA4B0BE62B8D836200F94CAB /* NotificationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA4B0BE52B8D836200F94CAB /* NotificationDetailView.swift */; };
+		FA8673E62B9171DB005E5888 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E52B9171DB005E5888 /* UserService.swift */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		FA45FFB12B8BFE8F00A126A6 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		FA45FFB32B8CF44900A126A6 /* NotificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRepository.swift; sourceTree = "<group>"; };
 		FA4B0BE52B8D836200F94CAB /* NotificationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailView.swift; sourceTree = "<group>"; };
+		FA8673E52B9171DB005E5888 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				FA45FF352B87C72F00A126A6 /* AuthenticationService.swift */,
+				FA8673E52B9171DB005E5888 /* UserService.swift */,
 				FA45FFAB2B8BE0A700A126A6 /* PreferenceService.swift */,
 				FA45FFAD2B8BF92600A126A6 /* NotificationService.swift */,
 				FA45FF9D2B8AAA2900A126A6 /* WeatherService.swift */,
@@ -429,6 +432,7 @@
 			files = (
 				FA45FFB42B8CF44900A126A6 /* NotificationRepository.swift in Sources */,
 				FA45FF9E2B8AAA2900A126A6 /* WeatherService.swift in Sources */,
+				FA8673E62B9171DB005E5888 /* UserService.swift in Sources */,
 				FA45FF322B87166700A126A6 /* AddFriendView.swift in Sources */,
 				FA45FFA72B8BBFB000A126A6 /* NotificationListItemView.swift in Sources */,
 				FA45FF342B87C71D00A126A6 /* FriendListItemView.swift in Sources */,

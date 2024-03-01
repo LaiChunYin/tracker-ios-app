@@ -58,16 +58,19 @@ struct LoginView: View {
                 
                 HStack {
                     Button {
-                        userViewModel.login(email: email, password: password, rememberMe: rememberMe)
-                        //                    let loginResult = userViewModel.login(email: email, password: password, rememberMe: rememberMe)
-                        
-                        //                    switch loginResult {
-                        //                    case .success:
-                        //                        viewSelection = 1
-                        //                    case .failure(let error):
-                        //                        print("login failed")
-                        //                        loginError = error
-                        //                    }
+                        Task {
+                            do {
+                                try await userViewModel.login(email: email, password: password, rememberMe: rememberMe)
+                            }
+                            catch let error as LoginError {
+                                print("having error \(error)")
+                                loginError = error
+                            }
+                            catch let error {
+                                print("unknown error \(error)")
+                                loginError = .unknown
+                            }
+                        }
                     } label: {
                         Text("Login")
                             .foregroundStyle(.white)
@@ -76,6 +79,18 @@ struct LoginView: View {
                     }
                     .tint(.green)
                     .buttonStyle(.borderedProminent)
+                    .alert(item: $loginError){ error in
+                        let errMsg: String
+                        switch error {
+                        case .emptyUsernameOrPwd:
+                            errMsg = "Please enter both username and password."
+                        case .invalidUser, .wrongPwd:
+                            errMsg = "Invalid username or password."
+                        default:
+                            errMsg = "Unknowm error"
+                        }
+                        return Alert(title: Text("Login Failed"), message: Text(errMsg))
+                    }
                     
                     Spacer()
                     

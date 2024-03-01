@@ -22,11 +22,8 @@ struct FollowedByListView: View {
                         print("deleting \(indexSet)")
                         for index in indexSet {
                             let userToBeDelete = followedBy[index]
-                            userViewModel.unfollow(followerId: userToBeDelete, targetId: userViewModel.currentUser!.identifier)
+                            userViewModel.unfollow(followerId: userToBeDelete, targetId: userViewModel.currentUser!.identifier, isRemoveingFollower: true)
                             followedBy.remove(at: index)
-                            
-                            let notification = Notification(type: .subscriberRemoved, extraData: ["target": userToBeDelete])
-                            userViewModel.sendNotification(receiverId: userToBeDelete, notification: notification)
                         }
                     }
                 }

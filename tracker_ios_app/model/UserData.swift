@@ -56,9 +56,14 @@ struct AppUser {
         self.accountData = accountData
     }
     
-    init(accountData: User, userData: UserData, notifications: [Notification]) {
+    init(accountData: User, userData: UserData) {
         self.accountData = accountData
         self.userData = userData
-        self.notifications = notifications
     }
+    
+//    init(accountData: User, userData: UserData, notifications: [Notification]) {
+//        self.accountData = accountData
+//        self.userData = userData
+//        self.notifications = notifications
+//    }
 }

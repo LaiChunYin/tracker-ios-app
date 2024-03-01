@@ -22,7 +22,7 @@ struct FollowingListView: View {
                         print("deleting \(indexSet)")
                         for index in indexSet {
                             let userToBeDelete = followers[index]
-                            userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDelete)
+                            userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDelete, isRemoveingFollower: false)
                             followers.remove(at: index)
                             
                         }
