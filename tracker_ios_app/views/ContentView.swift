@@ -31,7 +31,7 @@ struct ContentView: View {
                             // for testing notification, remove later
                             Button {
                                 print("sending test noti")
-                                //                                notificationViewModel.testing(receiverId: userViewModel.currentUser!.id)
+                                // notificationViewModel.testing(receiverId: userViewModel.currentUser!.id)
                                 notificationViewModel.testing(receiverId: userViewModel.currentUser!.identifier)
                             } label: {
                                 Image(systemName: "exclamationmark.octagon")
@@ -75,18 +75,14 @@ struct ContentView: View {
                             } label: {
                                 Label("More", systemImage: "line.horizontal.3")
                             }
-                            
-                            
                         }
                     }
                 }
-                
             }
             else {
                 LoginView()
             }
         }
-        .padding()
 
     }
 }

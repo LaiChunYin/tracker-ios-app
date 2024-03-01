@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MainView: View {
     @EnvironmentObject var userViewModel: UserViewModel
@@ -13,27 +14,28 @@ struct MainView: View {
     @Binding var rootScreen: RootViews
     
     var body: some View {
-        NavigationView {
+        VStack{
             TabView {
-                MapView().tabItem {
+                MapView(position: .camera(MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 32.8236,
+                                                                                             longitude: -96.7166),
+                                                    distance: 1000,
+                                                    heading: 250,
+                                                    pitch: 80))).tabItem {
                     Image(systemName: "map")
-                    Text("Map")
+                    Text("m") //Map
                 }
                 
                 FollowingListView().tabItem {
                     Image(systemName: "person")
-                    Text("Following")
+                    Text("f") //Following
                 }
                 
                 FollowedByListView().tabItem {
                     Image(systemName: "eye")
-                    Text("Followed By")
+                    Text("fb") //Followed By
                 }
             }
-
         }
-
-
      }
 
 }

@@ -10,13 +10,15 @@ import SwiftUI
 struct FollowedByListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var followedBy: [String] = []
+//    @State private var isFollowedBy: Bool = false
     
     var body: some View {
         NavigationView {
+           
             VStack {
                 List {
                     ForEach(followedBy, id: \.self) { followedBy in
-                        FriendListItemView(user: followedBy)
+                        FindUserView(user: followedBy, icon: "location.fill")
                     }
                     .onDelete { indexSet in
                         print("deleting \(indexSet)")
@@ -31,14 +33,66 @@ struct FollowedByListView: View {
                     }
                 }
             }
-            .navigationTitle("Followed By")
+            .navigationTitle("Fb page") //Followed By
             .onAppear() {
                 followedBy = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+//                if(followedBy.isEmpty){
+//                    isFollowedBy = true
+//                }
+//                else{
+//                    isFollowedBy = false
+//                }
             }
         }
+//            if(isFollowedBy){
+//                VStack(alignment: .center){
+//                    Text("Not followed by anyone yet 🙂")
+//                }
+//            }
     }
 }
 
 //#Preview {
 //    FollowedByListView()
 //}
+
+
+struct FindUserView: View {
+    var user: String = ""
+    var icon: String
+    
+    var body: some View {
+        VStack{
+            
+            HStack {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
+                    
+                    Text(user)
+                }
+                Spacer()
+                
+                Image(systemName: icon)
+                    .font(.title)
+                    .foregroundColor(.green)
+            }
+            .padding(.vertical, 5)
+            
+//            Divider()
+            
+            HStack {
+                Text("id: #12003")
+                    .font(.caption)
+                    .foregroundStyle(.gray)
+                
+                Spacer()
+                
+                Text("joined: 12-1-2024")
+                    .font(.caption)
+                    .foregroundStyle(.gray)
+            }
+        }
+    }
+}

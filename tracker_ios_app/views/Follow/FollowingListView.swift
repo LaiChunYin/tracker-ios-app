@@ -9,29 +9,29 @@ import SwiftUI
 
 struct FollowingListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followers: [String] = []
-    
+    @State private var followings: [String] = []
     var body: some View {
         NavigationView {
             VStack {
                 List {
-                    ForEach(followers, id: \.self) { follower in
-                        FriendListItemView(user: follower)
+                    ForEach(followings, id: \.self) { follower in
+//                        FriendListItemView(user: follower)
+                        FindUserView(user: follower, icon: "location.magnifyingglass")
                     }
                     .onDelete { indexSet in
                         print("deleting \(indexSet)")
                         for index in indexSet {
-                            let userToBeDelete = followers[index]
+                            let userToBeDelete = followings[index]
                             userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDelete)
-                            followers.remove(at: index)
+                            followings.remove(at: index)
                             
                         }
                     }
                 }
             }
-            .navigationTitle("Following")
+            .navigationTitle("F page") //Following
             .onAppear() {
-                followers = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
+                followings = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
             }
         }
     }
@@ -40,3 +40,4 @@ struct FollowingListView: View {
 //#Preview {
 //    FollowerListView()
 //}
+

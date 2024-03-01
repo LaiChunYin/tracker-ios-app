@@ -52,7 +52,7 @@ struct tracker_ios_app: App {
 //    let NotificationViewModel = NotificationViewModel()
     
     private let db: Firestore
-    private let userRepository: UserRepository
+//    private let userRepository: UserRepository
     
 //    private let authenticationService: AuthenticationService
     private let preferenceService: PreferenceService
@@ -66,7 +66,7 @@ struct tracker_ios_app: App {
         FirebaseApp.configure()
         
         self.db = Firestore.firestore()
-        self.userRepository = UserRepository(db: db)
+//        self.userRepository = UserRepository(db: db)
         
 //        self.authenticationService = AuthenticationService(userRepository: userRepository)
         self.preferenceService = PreferenceService()
