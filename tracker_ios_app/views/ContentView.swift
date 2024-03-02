@@ -29,45 +29,61 @@ struct ContentView: View {
                     .toolbar {
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
                             // for testing notification, remove later
-                            Button {
-                                print("sending test noti")
-                                //                                notificationViewModel.testing(receiverId: userViewModel.currentUser!.id)
-                                notificationViewModel.testing(receiverId: userViewModel.currentUser!.identifier)
-                            } label: {
-                                Image(systemName: "exclamationmark.octagon")
-                            }
+//                            Button {
+//                                print("sending test noti")
+//                                notificationViewModel.testing(receiverId: userViewModel.currentUser!.identifier)
+//                            } label: {
+//                                Image(systemName: "exclamationmark.octagon")
+//                                    .foregroundColor(.red)
+//                                    .fontWeight(.bold)
+//                                    .padding(4)
+//                                    .background(.ultraThinMaterial)
+//                                    .clipShape(.circle)
+//                            }
                             
                             Button {
                                 print("plus button pressed")
                                 showAddFriendForm.toggle()
                             } label: {
                                 Image(systemName: "person.badge.plus.fill")
+                                    .padding(4)
+                                    .background(.ultraThinMaterial)
+                                    .clipShape(.circle)
                             }
                             .sheet(isPresented: $showAddFriendForm) {
                                 AddFriendView(showAddFriendForm: $showAddFriendForm)
+                                .presentationDragIndicator(.visible)
+//                                .frame(maxWidth: .infinity, maxHeight: 30)
                             }
-                            .presentationDetents([.fraction(0.1)])
+
                             
                             switch rootScreen {
-                            case .main:
-                                Button {
-                                    print("going to notifications")
-                                    rootScreen = .notifications
-                                } label: {
-                                    Image(systemName: "bell.fill")
-                                }
-                            case .notifications:
-                                Button {
-                                    print("going to home")
-                                    rootScreen = .main
-                                } label: {
-                                    Image(systemName: "house.fill")
-                                }
+                                case .main:
+                                    Button {
+                                        print("going to notifications")
+                                        rootScreen = .notifications
+                                    } label: {
+                                        Image(systemName: "bell.fill")
+                                            .padding(4)
+                                            .background(.ultraThinMaterial)
+                                            .clipShape(.circle)
+                                    }
+                                case .notifications:
+                                    Button {
+                                        print("going to home")
+                                        rootScreen = .main
+                                    } label: {
+                                        Image(systemName: "house.fill")
+                                            .padding(4)
+                                            .background(.ultraThinMaterial)
+                                            .clipShape(.circle)
+                                    }
                             }
                             
                             
                             Menu {
                                 Button {
+                                    print("menu clicked")
                                     userViewModel.logout()
                                 } label: {
                                     Text("Logout")
@@ -75,18 +91,14 @@ struct ContentView: View {
                             } label: {
                                 Label("More", systemImage: "line.horizontal.3")
                             }
-                            
-                            
                         }
                     }
                 }
-                
             }
             else {
                 LoginView()
             }
         }
-        .padding()
 
     }
 }

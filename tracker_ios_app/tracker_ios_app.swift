@@ -40,8 +40,7 @@ import FirebaseFirestore
 
 @main
 struct tracker_ios_app: App {
-    private let db: Firestore
-    
+    private let db: Firestore    
     private let userRepository: UserRepository
     private let notificationRepository: NotificationRepository
     

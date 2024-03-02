@@ -9,57 +9,61 @@ import SwiftUI
 
 struct FollowingListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followers: [String] = []
+    @State private var followings: [String] = []
     @State private var errorType: UserError? = nil
     
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    ForEach(followers, id: \.self) { follower in
-                        FriendListItemView(user: follower)
-                    }
-                    .onDelete { indexSet in
-                        print("deleting \(indexSet)")
-                        for index in indexSet {
-                            let userToBeDeleted = followers[index]
-                            
-                            do {
-                                try userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
-                                followers.remove(at: index)
-                            }
-                            catch let error as UserError {
-                                errorType = error
-                            }
-                            catch let error {
-                                print("error in following list view \(error)")
-                                errorType = .unknown
-                            }
-                            
+                if(followings.isEmpty){
+                    Text("Not following anyone yet 🙂")
+                }
+                else {
+                    List {
+                        ForEach(followings, id: \.self) { follower in
+                            FriendListItemView(user: follower, icon: "location.magnifyingglass")
                         }
-                    }
-                    .alert(item: $errorType){ error in
-                        let errMsg: String
-                        switch error {
-                        case .notFollowing:
-                            errMsg = "You are not following this user"
-                        case .invalidUser:
-                            errMsg = "User not Found"
-                        default:
-                            errMsg = "Unknown error"
+                        .onDelete { indexSet in
+                            print("deleting \(indexSet)")
+                            for index in indexSet {
+                                let userToBeDeleted = followings[index]
+                                
+                                do {
+                                    try userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
+                                    followings.remove(at: index)
+                                }
+                                catch let error as UserError {
+                                    errorType = error
+                                }
+                                catch let error {
+                                    print("error in following list view \(error)")
+                                    errorType = .unknown
+                                }
+                            }
                         }
-                        return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
+                        .navigationTitle("Following") //Following
+                        .alert(item: $errorType){ error in
+                            let errMsg: String
+                            switch error {
+                            case .notFollowing:
+                                errMsg = "You are not following this user"
+                            case .invalidUser:
+                                errMsg = "User not Found"
+                            default:
+                                errMsg = "Unknown error"
+                            }
+                            return Alert(title: Text("Failed to remove user"), message: Text(errMsg))
+                        }
                     }
                 }
             }
-            .navigationTitle("Following")
             .onAppear() {
-                followers = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
+                followings = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
             }
         }
     }
 }
-
 //#Preview {
 //    FollowerListView()
 //}
+

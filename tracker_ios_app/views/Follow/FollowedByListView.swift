@@ -7,58 +7,68 @@
 
 import SwiftUI
 
+
 struct FollowedByListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followedBy: [String] = []
+    @State private var followedByList: [String] = []
     @State private var errorType: UserError? = nil
     
     var body: some View {
         NavigationView {
+
             VStack {
-                List {
-                    ForEach(followedBy, id: \.self) { followedBy in
-                        FriendListItemView(user: followedBy)
-                    }
-                    .onDelete { indexSet in
-                        print("deleting \(indexSet)")
-                        for index in indexSet {
-                            let userToBeDeleted = followedBy[index]
-                            
-                            do {
-                                try userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
-                                followedBy.remove(at: index)
-                            }
-                            catch let error as UserError {
-                                errorType = error
-                            }
-                            catch let error {
-                                print("error in following list view \(error)")
-                                errorType = .unknown
+                if(followedByList.isEmpty) {
+                    Text("Not followed by anyone yet 🙂")
+                }
+                else {
+                    List {
+                        ForEach(followedByList, id: \.self) { followedBy in
+                            FriendListItemView(user: followedBy, icon: "location.fill")
+                        }
+                        .onDelete { indexSet in
+                            print("deleting \(indexSet)")
+                            for index in indexSet {
+                                let userToBeDeleted = followedByList[index]
+                                
+                                do {
+                                    try userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
+                                    followedByList.remove(at: index)
+                                }
+                                catch let error as UserError {
+                                    errorType = error
+                                }
+                                catch let error {
+                                    print("error in following list view \(error)")
+                                    errorType = .unknown
+                                }
                             }
                         }
-                    }
-                    .alert(item: $errorType){ error in
-                        let errMsg: String
-                        switch error {
-                        case .notFollowedBy:
-                            errMsg = "This user is not following you"
-                        case .invalidUser:
-                            errMsg = "User not Found"
-                        default:
-                            errMsg = "Unknown error"
+                        .navigationTitle("Followed By") //Followed By
+                        .alert(item: $errorType) { error in
+                            let errMsg: String
+                            switch error {
+                            case .notFollowedBy:
+                                errMsg = "This user is not following you"
+                            case .invalidUser:
+                                errMsg = "User not Found"
+                            default:
+                                errMsg = "Unknown error"
+                            }
+                            return Alert(title: Text("Failed to remove user"), message: Text(errMsg))
                         }
-                        return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
                     }
                 }
             }
-            .navigationTitle("Followed By")
             .onAppear() {
-                followedBy = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+                followedByList = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
             }
         }
+           
     }
 }
 
+
 //#Preview {
-//    FollowedByListView()
+//    FollowedByListView(followedBy: ["user1"])
+//        .preferredColorScheme(.dark)
 //}

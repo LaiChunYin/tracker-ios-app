@@ -59,7 +59,7 @@ struct NotificationDetailView: View {
                             default:
                                 errMsg = "Unknown error"
                             }
-                            return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
+                            return Alert(title: Text("Failed to Accept Invitation"), message: Text(errMsg))
                         }
                         
                         Button {
