@@ -10,7 +10,8 @@ import SwiftUI
 
 struct FollowedByListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followedByList: [String] = []
+//    @State private var followedByList: [String] = []
+    @State private var followedByList: [(key: String, value: UserItemSummary)] = []
     @State private var errorType: UserError? = nil
     
     var body: some View {
@@ -22,13 +23,13 @@ struct FollowedByListView: View {
                 }
                 else {
                     List {
-                        ForEach(followedByList, id: \.self) { followedBy in
-                            FriendListItemView(user: followedBy, icon: "location.fill")
+                        ForEach(followedByList, id: \.key) { followedBy, userItemSummary in
+                            FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, icon: "location.fill")
                         }
                         .onDelete { indexSet in
                             print("deleting \(indexSet)")
                             for index in indexSet {
-                                let userToBeDeleted = followedByList[index]
+                                let userToBeDeleted = followedByList[index].key
                                 
                                 do {
                                     try userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
@@ -60,7 +61,9 @@ struct FollowedByListView: View {
                 }
             }
             .onAppear() {
-                followedByList = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+//                followedByList = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+                
+                followedByList = userViewModel.currentUser?.userData?.followedBy.sorted {$0.value.connectionTime > $1.value.connectionTime} ?? []
             }
         }
            

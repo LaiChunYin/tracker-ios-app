@@ -37,11 +37,21 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         userServiceDelegate?.onUserUpdate(userData: userData)
     }
     
-    func follow(followerId: String, targetId: String) {
+    func follow(followerId: String, targetId: String) async throws {
+        let followerUserData: UserData = try await userRepository.getUserDataById(userId: followerId)
+        
+        let connectAt: Date = Date.now
+        
+        var followerInfoDict: [String: Any] = followerUserData.getUserSummaryDict()
+        var targetInfoDict: [String: Any] = currentUser!.userData!.getUserSummaryDict()
+        
+        followerInfoDict["connectionTime"] = connectAt
+        targetInfoDict["connectionTime"] = connectAt
+        
         // use FieldPath to make Firebase to correctly treat a dot as part of the email instead of the next position in the path
-        userRepository.updateUserData(userId: followerId, newData: [FieldPath(["following", targetId]): true])
+        userRepository.updateUserData(userId: followerId, newData: [FieldPath(["following", targetId]): targetInfoDict])
       
-        userRepository.updateUserData(userId: targetId, newData: [FieldPath(["followedBy", followerId]): true])
+        userRepository.updateUserData(userId: targetId, newData: [FieldPath(["followedBy", followerId]): followerInfoDict])
         
         notificationService.sendAcceptedNotification(receiverId: followerId, by: targetId)
     }
@@ -54,6 +64,36 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         
         if isRemovingFollower {
             notificationService.sendRemovedNotification(receiverId: followerId, by: targetId)
+        }
+    }
+    
+    // when a user updates his profile, the latest profile will be stored into the following field of all of his followers. Here, we don't choose the approach of getting the user profile at the time of loading the following list, because it will take for database operations
+    func updateProfile(userId: String, nickName: String, profilePic: String) async throws {
+        let following = self.currentUser?.userData?.following.keys.map {$0} ?? []
+        let followers = self.currentUser?.userData?.followedBy.keys.map {$0} ?? []
+        
+        // update self profile pic
+        var userIdAndDataTuples: [(String, [AnyHashable: Any])] = [(userId, ["nickName": nickName, "profilePic": profilePic])]
+        
+        // notify users that the current user follows or is followed by the current user that the profile is changing
+        for follower in followers {
+            print("in batch follower: \(follower)")
+        
+            userIdAndDataTuples.append((follower, [FieldPath(["following", userId, "nickName"]): nickName, FieldPath(["following", userId, "profilePic"]): profilePic]))
+        }
+        
+        for follow in following {
+            print("in batch follow: \(follow)")
+        
+            userIdAndDataTuples.append((follow, [FieldPath(["followedBy", userId, "nickName"]): nickName, FieldPath(["followedBy", userId, "profilePic"]): profilePic]))
+        }
+        
+        do {
+            try await userRepository.updateUserDataInBatch(userIdAndDataTuples: userIdAndDataTuples)
+        }
+        catch let error {
+            print("cannot update in batch: \(error)")
+            throw error
         }
     }
     

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct FollowingListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-    @State private var followings: [String] = []
+//    @State private var followings: [String] = []
+    @State private var followings: [(key: String, value: UserItemSummary)] = []
     @State private var errorType: UserError? = nil
     
     var body: some View {
@@ -20,13 +21,13 @@ struct FollowingListView: View {
                 }
                 else {
                     List {
-                        ForEach(followings, id: \.self) { follower in
-                            FriendListItemView(user: follower, icon: "location.magnifyingglass")
+                        ForEach(followings, id: \.key) { follower, userItemSummary in
+                            FriendListItemView(userId: follower, userItemSummary: userItemSummary, icon: "location.magnifyingglass")
                         }
                         .onDelete { indexSet in
                             print("deleting \(indexSet)")
                             for index in indexSet {
-                                let userToBeDeleted = followings[index]
+                                let userToBeDeleted = followings[index].key
                                 
                                 do {
                                     try userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
@@ -58,7 +59,12 @@ struct FollowingListView: View {
                 }
             }
             .onAppear() {
-                followings = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
+                print("following list appear")
+                
+//                followings = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
+                followings = userViewModel.currentUser?.userData?.following.sorted {$0.value.connectionTime > $1.value.connectionTime} ?? []
+                
+                print("following is \(followings)")
             }
         }
     }

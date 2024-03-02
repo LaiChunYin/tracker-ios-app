@@ -33,17 +33,19 @@ struct NotificationDetailView: View {
                 case .invitationReceived:
                     HStack {
                         Button {
-                            do {
-                                try userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
-                                
-                                notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
-                            }
-                            catch let error as UserError {
-                                print("error notification detail view \(error)")
-                                errorType = error
-                            }
-                            catch let error {
-                                errorType = .unknown
+                            Task {
+                                do {
+                                    try await userViewModel.follow(followerId: notification.extraData["follower"]!, targetId: userViewModel.currentUser!.identifier)
+                                    
+                                    notificationViewModel.actionDone(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
+                                }
+                                catch let error as UserError {
+                                    print("error notification detail view \(error)")
+                                    errorType = error
+                                }
+                                catch let error {
+                                    errorType = .unknown
+                                }
                             }
                         } label: {
                             Text("Accept")

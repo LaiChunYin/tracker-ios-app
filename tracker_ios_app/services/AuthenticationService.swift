@@ -18,7 +18,7 @@ class AuthenticationService {
     private var notificationRepository: NotificationRepository
     private var userListener: ListenerRegistration? = nil
     private var notificationsListener: ListenerRegistration? = nil
-    private var currentUser: AppUser? = nil
+//    private var currentUser: AppUser? = nil
     
     init(preferenceService: PreferenceService, notificationService: NotificationService, userRepository: UserRepository, notificationRepository: NotificationRepository) {
         self.preferenceService = preferenceService
@@ -27,16 +27,16 @@ class AuthenticationService {
         self.notificationRepository = notificationRepository
     }
     
-    func signUp(email : String, password : String) async throws {
+    func signUp(email : String, nickName: String, password : String) async throws {
         do {
             let userAccount = try await self.createAccount(email: email, password: password)
             
             if let identifier = userAccount.email ?? userAccount.phoneNumber {
-                try await userRepository.createNewUserDataStorage(userId: identifier)
+                try await userRepository.createNewUserDataStorage(userId: identifier, nickName: nickName)
                 notificationService.sendNewAccountNotification(receiverId: identifier)
-                self.currentUser = AppUser(accountData: userAccount, userData: UserData())
+//                self.currentUser = AppUser(accountData: userAccount, userData: UserData(nickName: nickName))
                 print("current user is \(identifier)")
-                self.initializeData(user: self.currentUser!)
+                self.initializeData(user: AppUser(accountData: userAccount, userData: UserData(nickName: nickName)))
             }
         }
         catch let error as NSError {
@@ -91,9 +91,9 @@ class AuthenticationService {
                         print(#function, "Login Successful")
                         
                         if let userAccount = authResult?.user {
-                            self!.currentUser = AppUser(accountData: userAccount)
+//                            self!.currentUser = AppUser(accountData: userAccount)
                             
-                            self!.initializeData(user: self!.currentUser!)
+                            self!.initializeData(user: AppUser(accountData: userAccount))
 
                         }
                         continuation.resume(returning: ())

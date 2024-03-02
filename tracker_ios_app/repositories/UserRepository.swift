@@ -39,12 +39,18 @@ class UserRepository {
             return userListener
     }
     
-    func createNewUserDataStorage(userId: String) async throws {
+    func getUserDataById(userId: String) async throws -> UserData {
+        let userData = try await self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).getDocument().data(as: UserData.self)
+        
+        return userData
+    }
+    
+    func createNewUserDataStorage(userId: String, nickName: String = "") async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             print("creating new storage for \(userId), \(UserData().toDictionary())")
             
             do {
-                let newUserData = UserData()
+                let newUserData = UserData(nickName: nickName)
                 let userDocRef = self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId)
                 userDocRef.setData(newUserData.toDictionary()!)
                 continuation.resume(returning: ())
@@ -60,6 +66,31 @@ class UserRepository {
         self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).updateData(newData)
     }
 
+    func updateUserDataInBatch(userIdAndDataTuples: [(String, [AnyHashable: Any])]) async throws {
+        guard !userIdAndDataTuples.isEmpty else {
+            print("update batch is empty")
+            return
+        }
+        
+        let batch = self.db.batch()
+
+        for (userId, newData) in userIdAndDataTuples {
+            let docRef = self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId)
+            batch.updateData(newData, forDocument: docRef)
+        }
+
+//        batch.commit { err in
+//            if let err = err {
+//                print("Error writing batch \(err)")
+//            } else {
+//                print("Batch write succeeded.")
+//            }
+//        }
+        
+        try await batch.commit()
+        
+    }
+    
     func isUserExist(userId: String) async -> Bool {
         do {
             let document = try await self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).getDocument()

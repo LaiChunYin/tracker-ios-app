@@ -44,6 +44,7 @@
 		FA8673E62B9171DB005E5888 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E52B9171DB005E5888 /* UserService.swift */; };
 		FA8673E82B9264C1005E5888 /* ErrorHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E72B9264C1005E5888 /* ErrorHelper.swift */; };
 		FA8673EA2B92653B005E5888 /* protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673E92B92653B005E5888 /* protocols.swift */; };
+		FA8673EC2B92EC1F005E5888 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673EB2B92EC1F005E5888 /* SettingsView.swift */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +103,7 @@
 		FA8673E52B9171DB005E5888 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		FA8673E72B9264C1005E5888 /* ErrorHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHelper.swift; sourceTree = "<group>"; };
 		FA8673E92B92653B005E5888 /* protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = protocols.swift; sourceTree = "<group>"; };
+		FA8673EB2B92EC1F005E5888 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,6 +232,7 @@
 			children = (
 				FA45FEF82B870E4100A126A6 /* ContentView.swift */,
 				FA45FF292B870F9E00A126A6 /* MainView.swift */,
+				FA8673EB2B92EC1F005E5888 /* SettingsView.swift */,
 				FAD8E5802B8ED78100F980F8 /* Map */,
 				FAD8E57F2B8ED6FF00F980F8 /* Follow */,
 				FA45FFAA2B8BD3C800A126A6 /* Authentication */,
@@ -451,6 +454,7 @@
 				FA8673EA2B92653B005E5888 /* protocols.swift in Sources */,
 				FA45FF262B870F8500A126A6 /* LoginView.swift in Sources */,
 				FA45FF952B8A539400A126A6 /* UserData.swift in Sources */,
+				FA8673EC2B92EC1F005E5888 /* SettingsView.swift in Sources */,
 				FA45FF982B8A9EC300A126A6 /* Constants.swift in Sources */,
 				FA45FF9C2B8AA89500A126A6 /* UserViewModel.swift in Sources */,
 				FA45FF2E2B870FAD00A126A6 /* FollowingListView.swift in Sources */,

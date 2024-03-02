@@ -13,11 +13,14 @@ struct ContentView: View {
     @EnvironmentObject var notificationViewModel: NotificationViewModel
     @State private var showAddFriendForm: Bool = false
     @State var rootScreen: RootViews = .main
+    @State var viewSelection: Int? = nil
     
     var body: some View {
         VStack {
             if userViewModel.currentUser != nil {
                 NavigationStack {
+                    NavigationLink(destination: SettingsView().environmentObject(userViewModel), tag: 1, selection: $viewSelection) {}
+                    
                     Group {
                         switch rootScreen {
                         case .main:
@@ -82,6 +85,13 @@ struct ContentView: View {
                             
                             
                             Menu {
+                                Button {
+                                    print("going to settings")
+                                    viewSelection = 1
+                                } label: {
+                                    Text("Settings")
+                                }
+
                                 Button {
                                     print("menu clicked")
                                     userViewModel.logout()

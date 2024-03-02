@@ -30,7 +30,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     
     func onUserInit(user: AppUser) {
         DispatchQueue.main.async {
-            print("initializing user")
+            print("initializing user \(user.userData?.getUserSummaryDict())")
             self.currentUser = user
         }
     }
@@ -73,8 +73,8 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         }
     }
     
-    func signUp(email: String, password: String, confirmPassword: String) async throws {
-        guard !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
+    func signUp(email: String, nickName: String, password: String, confirmPassword: String) async throws {
+        guard !email.isEmpty && !nickName.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
             print("empty value")
             throw SignUpError.emptyInputs
         }
@@ -100,7 +100,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         print("\(#function), \(email), \(password)")
               
         do {
-            try await authenticationService.signUp(email: email, password: password)
+            try await authenticationService.signUp(email: email, nickName: nickName, password: password)
         }
         catch let error as NSError {
             print("error in sign up \(error)")
@@ -110,17 +110,23 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     
     
     
-    func follow(followerId: String, targetId: String) throws {
+    func follow(followerId: String, targetId: String) async throws {
         // TODO: check if the target is already followed
         guard !userService.isCurrentUserFollowedBy(userId: followerId) else {
             throw UserError.alreadyFollowed
         }
 
-        userService.follow(followerId: followerId, targetId: targetId)
-        
-        if var following = currentUser?.userData?.following {
-            following[targetId] = true
-            currentUser?.userData?.following = following
+        do {
+            try await userService.follow(followerId: followerId, targetId: targetId)
+            
+//            if var following = currentUser?.userData?.following {
+//                following[targetId] =
+//                currentUser?.userData?.following = following
+//            }
+        }
+        catch let error {
+            print("error in follow")
+            throw error
         }
     }
     
@@ -136,9 +142,36 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         
         userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemovingFollower)
         
-        if var following = currentUser?.userData?.following {
-            following.removeValue(forKey: targetId)
-            currentUser?.userData?.following = following
+//        if var following = currentUser?.userData?.following {
+//            following.removeValue(forKey: targetId)
+//            currentUser?.userData?.following = following
+//        }
+    }
+    
+    
+    func updateProfile(userId: String, nickName: String, imageData: Data?) async throws {
+        guard !nickName.isEmpty else {
+            print("nick name cannot be empty")
+            throw UpdateProfileError.emptyNickName
+        }
+        
+        guard imageData == nil || imageData!.count < 30000 else {
+            print("image too large, size \(imageData?.count ?? 0) byte")
+            throw UpdateProfileError.imageTooLarge
+        }
+        
+        let base64Encoded = imageData?.base64EncodedString() ?? ""
+        print("img string is \(base64Encoded)")
+        
+        let profilePic: String = base64Encoded 
+        
+        print("updating profile, \(userId), \(nickName)")
+        
+        do {
+            try await userService.updateProfile(userId: userId, nickName: nickName, profilePic: profilePic)
+        }
+        catch let error {
+            throw UpdateProfileError.databaseError
         }
     }
 }

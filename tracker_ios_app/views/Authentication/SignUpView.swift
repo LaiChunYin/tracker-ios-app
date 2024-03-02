@@ -10,6 +10,7 @@ import SwiftUI
 struct SignUpView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var email: String = ""
+    @State private var nickName: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
     @State private var signUpError: SignUpError? = nil
@@ -22,6 +23,12 @@ struct SignUpView: View {
                 .foregroundColor(.white)
             
             TextField("Enter your email", text: $email)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .foregroundColor(.orange)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
+                .padding()
+            
+            TextField("Enter your Nick Name", text: $nickName)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .foregroundColor(.orange)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
@@ -52,7 +59,7 @@ struct SignUpView: View {
             Button {
                 Task {
                     do {
-                        try await userViewModel.signUp(email: email, password: password, confirmPassword: confirmPassword)
+                        try await userViewModel.signUp(email: email, nickName: nickName, password: password, confirmPassword: confirmPassword)
                     }
                     catch let error as SignUpError {
                         signUpError = error

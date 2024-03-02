@@ -26,17 +26,17 @@ struct MainView: View {
                     Text("Map") //Map
                 }
                 
-                FollowingListView().tabItem {
+                FollowingListView().environmentObject(userViewModel).tabItem {
                     Image(systemName: "person")
                     Text("Following") //Following
                 }
                 
-                FollowedByListView().tabItem {
+                FollowedByListView().environmentObject(userViewModel).tabItem {
                     Image(systemName: "eye")
                     Text("Followed By") //Followed By
                 }
             }
-            .navigationTitle(userViewModel.currentUser != nil ? "Welcome, \(userViewModel.currentUser!.identifier)" : "Logging out")
+            .navigationTitle(userViewModel.currentUser?.userData != nil ? "Welcome, \(userViewModel.currentUser!.userData!.nickName)" : "Logging out")
             .navigationBarTitleDisplayMode(.inline)
         }
      }

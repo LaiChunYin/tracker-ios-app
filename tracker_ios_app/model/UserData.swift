@@ -27,25 +27,33 @@ struct Waypoint: Codable {
 struct UserData: Codable {
 //    @DocumentID var id: String?
     var isConnected: Bool = false
-//    var currentLocation
+    var nickName: String = ""
+    var profilePic: String = ""
     var path: [Waypoint] = []
-//    var following: [String] = []
-//    var followedBy: [String] = []
-//    var notifications: [Notification] = []
-    var following: [String: Bool] = [:]
-    var followedBy: [String: Bool] = [:]
-//    var notifications: [String: [String: String]] = [:]
+    var following: [String: UserItemSummary] = [:]
+    var followedBy: [String: UserItemSummary] = [:]
+    
+    init(nickName: String = "") {
+        print("initing nick name")
+        self.nickName = nickName
+    }
+    
+    func getUserSummaryDict() -> [String: Any] {
+        return ["nickName": nickName, "profilePic": profilePic]
+    }
+}
+
+struct UserItemSummary: Codable {
+    var nickName: String
+    var profilePic: String
+    var connectionTime: Date
 }
 
 struct AppUser {
     let accountData: User
     var userData: UserData? = nil
     var notifications: [Notification] = []
-//    var id: String {
-//        get {
-//            return self.accountData.uid
-//        }
-//    }
+    
     var identifier: String {
         get {
             return self.accountData.email ?? self.accountData.phoneNumber ?? self.accountData.uid
