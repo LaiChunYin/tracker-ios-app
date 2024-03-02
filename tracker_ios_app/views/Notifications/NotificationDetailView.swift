@@ -22,11 +22,19 @@ struct NotificationDetailView: View {
     
     var body: some View {
         VStack {
+            
             Text("\(notification.title)")
+                .font(.title)
+                .padding(.top, 40)
+            
             Text("At: \(dateFormatter.string(from: notification.time))")
+                .font(.caption)
+                .foregroundStyle(.orange)
             Divider()
             Text("\(notification.content)")
-            
+                .font(.footnote)
+                .padding(.horizontal, 6)
+                .multilineTextAlignment(.leading)
             
             switch notification.type {
                 case .invitationReceived:
@@ -42,6 +50,11 @@ struct NotificationDetailView: View {
                             Text("Accept")
                         }
                         .disabled(notification.actionTaken!)
+                        .buttonStyle(.bordered)
+                       
+                        
+                        Spacer()
+                        
                         
                         Button {
 //                            notificationViewModel.rejectFollowRequest(receiverId: notification.extraData["follower"]!, by: userViewModel.currentUser!.id)
@@ -52,11 +65,18 @@ struct NotificationDetailView: View {
                             Text("Reject")
                         }
                         .disabled(notification.actionTaken!)
+                        .foregroundColor(.red)
+                        .buttonStyle(.bordered)
+                        
                     }
+                    .padding(30)
                 default:
                     EmptyView()
                 }
+            
+            Spacer()
         }
+        
         .onAppear() {
             print("read")
 //            notificationViewModel.notificationRead(notificationId: notification.id!)
@@ -65,6 +85,7 @@ struct NotificationDetailView: View {
             }
         }
     }
+        
 }
 
 //#Preview {
