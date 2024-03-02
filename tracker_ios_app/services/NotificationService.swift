@@ -31,7 +31,7 @@ class NotificationService: NotificationRepositoryDelegate {
     }
     
     func notificationRead(userId: String, notificationId: String) {
-        notificationRepository.updateNotification(userId: userId, notificationId: notificationId, newData: ["read": true])
+        notificationRepository.updateNotification(userId: userId, notificationId: notificationId, newData: [NotificationFields.READ: true])
     }
     
     func sendNotification(receiverId: String, notification: Notification) {
@@ -102,7 +102,7 @@ class NotificationService: NotificationRepositoryDelegate {
     }
     
     func actionDone(userId: String, notificationId: String) {
-        notificationRepository.updateNotification(userId: userId, notificationId: notificationId, newData: ["actionTaken": true])
+        notificationRepository.updateNotification(userId: userId, notificationId: notificationId, newData: [NotificationFields.ACTION_TAKEN: true])
     }
     
     func testing(receiverId: String) {

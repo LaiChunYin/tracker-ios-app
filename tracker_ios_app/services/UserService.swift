@@ -45,25 +45,40 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         var followerInfoDict: [String: Any] = followerUserData.getUserSummaryDict()
         var targetInfoDict: [String: Any] = currentUser!.userData!.getUserSummaryDict()
         
-        followerInfoDict["connectionTime"] = connectAt
-        targetInfoDict["connectionTime"] = connectAt
+        followerInfoDict[UserDataFields.CONNECTION_TIME] = connectAt
+        targetInfoDict[UserDataFields.CONNECTION_TIME] = connectAt
         
         // use FieldPath to make Firebase to correctly treat a dot as part of the email instead of the next position in the path
-        userRepository.updateUserData(userId: followerId, newData: [FieldPath(["following", targetId]): targetInfoDict])
-      
-        userRepository.updateUserData(userId: targetId, newData: [FieldPath(["followedBy", followerId]): followerInfoDict])
-        
-        notificationService.sendAcceptedNotification(receiverId: followerId, by: targetId)
+        var userIdAndDataTuples: [(String, [AnyHashable: Any])] = []
+        userIdAndDataTuples.append((followerId, [FieldPath([UserDataFields.FOLLOWING, targetId]): targetInfoDict]))
+        userIdAndDataTuples.append((targetId, [FieldPath([UserDataFields.FOLLOWED_BY, followerId]): followerInfoDict]))
+
+        do {
+            try await userRepository.updateUserDataInBatch(userIdAndDataTuples: userIdAndDataTuples)
+            notificationService.sendAcceptedNotification(receiverId: followerId, by: targetId)
+        }
+        catch let error {
+            print("error in updating db in follow \(error)")
+            throw error
+        }
     }
     
-    func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) {
+    func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) async throws {
         // use FieldPath to make Firebase to correctly treat a dot as part of the email instead of the next position in the path
-        userRepository.updateUserData(userId: followerId, newData: [FieldPath(["following", targetId]): FieldValue.delete()])
-      
-        userRepository.updateUserData(userId: targetId, newData: [FieldPath(["followedBy", followerId]): FieldValue.delete()])
-        
-        if isRemovingFollower {
-            notificationService.sendRemovedNotification(receiverId: followerId, by: targetId)
+        var userIdAndDataTuples: [(String, [AnyHashable: Any])] = []
+        userIdAndDataTuples.append((followerId, [FieldPath([UserDataFields.FOLLOWING, targetId]): FieldValue.delete()]))
+        userIdAndDataTuples.append((targetId, newData: [FieldPath([UserDataFields.FOLLOWED_BY, followerId]): FieldValue.delete()]))
+
+        do {
+            try await userRepository.updateUserDataInBatch(userIdAndDataTuples: userIdAndDataTuples)
+            
+            if isRemovingFollower {
+                notificationService.sendRemovedNotification(receiverId: followerId, by: targetId)
+            }
+        }
+        catch let error {
+            print("error in updating db in unfollow \(error)")
+            throw error
         }
     }
     
@@ -73,19 +88,19 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         let followers = self.currentUser?.userData?.followedBy.keys.map {$0} ?? []
         
         // update self profile pic
-        var userIdAndDataTuples: [(String, [AnyHashable: Any])] = [(userId, ["nickName": nickName, "profilePic": profilePic])]
+        var userIdAndDataTuples: [(String, [AnyHashable: Any])] = [(userId, [UserDataFields.NICKNAME: nickName, UserDataFields.PROFILE: profilePic])]
         
         // notify users that the current user follows or is followed by the current user that the profile is changing
         for follower in followers {
             print("in batch follower: \(follower)")
         
-            userIdAndDataTuples.append((follower, [FieldPath(["following", userId, "nickName"]): nickName, FieldPath(["following", userId, "profilePic"]): profilePic]))
+            userIdAndDataTuples.append((follower, [FieldPath([UserDataFields.FOLLOWING, userId, UserDataFields.NICKNAME]): nickName, FieldPath([UserDataFields.FOLLOWING, userId, UserDataFields.PROFILE]): profilePic]))
         }
         
         for follow in following {
             print("in batch follow: \(follow)")
         
-            userIdAndDataTuples.append((follow, [FieldPath(["followedBy", userId, "nickName"]): nickName, FieldPath(["followedBy", userId, "profilePic"]): profilePic]))
+            userIdAndDataTuples.append((follow, [FieldPath([UserDataFields.FOLLOWED_BY, userId, UserDataFields.NICKNAME]): nickName, FieldPath([UserDataFields.FOLLOWED_BY, userId, UserDataFields.PROFILE]): profilePic]))
         }
         
         do {

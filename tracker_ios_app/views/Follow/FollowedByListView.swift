@@ -27,20 +27,22 @@ struct FollowedByListView: View {
                             FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, icon: "location.fill")
                         }
                         .onDelete { indexSet in
-                            print("deleting \(indexSet)")
-                            for index in indexSet {
-                                let userToBeDeleted = followedByList[index].key
-                                
-                                do {
-                                    try userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
-                                    followedByList.remove(at: index)
-                                }
-                                catch let error as UserError {
-                                    errorType = error
-                                }
-                                catch let error {
-                                    print("error in following list view \(error)")
-                                    errorType = .unknown
+                            Task {
+                                print("deleting \(indexSet)")
+                                for index in indexSet {
+                                    let userToBeDeleted = followedByList[index].key
+                                    
+                                    do {
+                                        try await userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
+                                        followedByList.remove(at: index)
+                                    }
+                                    catch let error as UserError {
+                                        errorType = error
+                                    }
+                                    catch let error {
+                                        print("error in following list view \(error)")
+                                        errorType = .unknown
+                                    }
                                 }
                             }
                         }
@@ -52,6 +54,8 @@ struct FollowedByListView: View {
                                 errMsg = "This user is not following you"
                             case .invalidUser:
                                 errMsg = "User not Found"
+                            case .databaseError:
+                                errMsg = "There is an error in the database"
                             default:
                                 errMsg = "Unknown error"
                             }

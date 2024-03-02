@@ -25,20 +25,22 @@ struct FollowingListView: View {
                             FriendListItemView(userId: follower, userItemSummary: userItemSummary, icon: "location.magnifyingglass")
                         }
                         .onDelete { indexSet in
-                            print("deleting \(indexSet)")
-                            for index in indexSet {
-                                let userToBeDeleted = followings[index].key
-                                
-                                do {
-                                    try userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
-                                    followings.remove(at: index)
-                                }
-                                catch let error as UserError {
-                                    errorType = error
-                                }
-                                catch let error {
-                                    print("error in following list view \(error)")
-                                    errorType = .unknown
+                            Task {
+                                print("deleting \(indexSet)")
+                                for index in indexSet {
+                                    let userToBeDeleted = followings[index].key
+                                    
+                                    do {
+                                        try await userViewModel.unfollow(followerId: userViewModel.currentUser!.identifier, targetId: userToBeDeleted, isRemovingFollower: false)
+                                        followings.remove(at: index)
+                                    }
+                                    catch let error as UserError {
+                                        errorType = error
+                                    }
+                                    catch let error {
+                                        print("error in following list view \(error)")
+                                        errorType = .unknown
+                                    }
                                 }
                             }
                         }
@@ -48,6 +50,8 @@ struct FollowingListView: View {
                             switch error {
                             case .notFollowing:
                                 errMsg = "You are not following this user"
+                            case .databaseError:
+                                errMsg = "There is an error in the database"
                             case .invalidUser:
                                 errMsg = "User not Found"
                             default:

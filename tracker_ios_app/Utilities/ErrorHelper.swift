@@ -44,6 +44,7 @@ enum UserError: Error,Identifiable {
     case alreadyFollowed
     case notFollowing
     case notFollowedBy
+    case databaseError
     case unknown
 }
 

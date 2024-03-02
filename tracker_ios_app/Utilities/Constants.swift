@@ -36,6 +36,19 @@ struct UserDataSubcollections {
     static let COLLECTION_NOTIFICATION = "Notifications"
 }
 
+struct UserDataFields {
+    static let CONNECTION_TIME = "connectionTime"
+    static let FOLLOWING = "following"
+    static let FOLLOWED_BY = "followedBy"
+    static let NICKNAME = "nickName"
+    static let PROFILE = "profilePic"
+}
+
+struct NotificationFields {
+    static let READ = "read"
+    static let ACTION_TAKEN = "actionTaken"
+}
+
 enum NotificationChangeType {
     case added
     case updated

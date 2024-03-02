@@ -130,7 +130,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         }
     }
     
-    func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) throws {
+    func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) async throws {
         // TODO: check if the target is already unfollowed
         guard !isRemovingFollower || userService.isCurrentUserFollowedBy(userId: followerId) else {
             throw UserError.notFollowing
@@ -140,12 +140,17 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
             throw UserError.notFollowedBy
         }
         
-        userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemovingFollower)
-        
-//        if var following = currentUser?.userData?.following {
-//            following.removeValue(forKey: targetId)
-//            currentUser?.userData?.following = following
-//        }
+        do {
+            try await userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemovingFollower)
+            
+    //        if var following = currentUser?.userData?.following {
+    //            following.removeValue(forKey: targetId)
+    //            currentUser?.userData?.following = following
+    //        }
+        }
+        catch let error {
+            throw error
+        }
     }
     
     

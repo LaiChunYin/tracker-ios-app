@@ -62,8 +62,8 @@ class UserRepository {
         }
     }
     
-    func updateUserData(userId: String, newData: [AnyHashable: Any]) {
-        self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).updateData(newData)
+    func updateUserData(userId: String, newData: [AnyHashable: Any]) async throws {
+        try await self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).updateData(newData)
     }
 
     func updateUserDataInBatch(userIdAndDataTuples: [(String, [AnyHashable: Any])]) async throws {
