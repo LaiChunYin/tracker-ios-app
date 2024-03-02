@@ -8,19 +8,28 @@
 import SwiftUI
 import MapKit
 
+enum MapDetail{
+    static let defaultLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 40.7608, longitude: -111.8910), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+    static let defaultCoordinate = CLLocationCoordinate2D(latitude: 40.7608, longitude: -111.8910)
+}
+
 struct MapView: View {
-    @State var position: MapCameraPosition
+    @State private var viewModel = MapViewModel()
+    @State var position: MKCoordinateRegion
     @State var isSatelliteMap: Bool = false
-    @State var isRecenterMap: Bool = false // if isRecenterMap is true set the coordinates to default value.
+    @State var isRecenterMap: Bool = false
+
+    @State private var mapCoordinate = MKCoordinateRegion(center: CLLocationCoordinate2D(
+    latitude: 40.7608,
+    longitude: -111.8910),
+    span: MKCoordinateSpan(latitudeDelta: 0.5,
+    longitudeDelta: 0.5))
     
-    var defaultPosition: MapCameraPosition = .camera(MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 32.8236, longitude: -96.7166),
-                                                                   distance: 1000,
-                                                                   heading: 250,
-                                                                   pitch: 80))
+    
     
     var body: some View {
-        Map(position: $position){
-            Annotation("here", coordinate: CLLocationCoordinate2D(latitude: 32.8236, longitude: -96.7166)){
+        Map{
+            Annotation("here", coordinate: MapDetail.defaultCoordinate){
                 Image(systemName: "mappin")
                     .resizable()
                     .scaledToFit()
@@ -31,6 +40,9 @@ struct MapView: View {
                         
                     }
             }
+        }
+        .onAppear{
+            viewModel.checkIfLocationServicesIsEnabled()
         }
         .mapStyle( isSatelliteMap ? .imagery(elevation: .realistic) : .standard(elevation: .realistic))
         .overlay(alignment: .bottomTrailing){
@@ -64,7 +76,7 @@ struct MapView: View {
         .onChange(of: isRecenterMap) { newValue in
                         isRecenterMap = false
                     if newValue {
-                        position = defaultPosition
+                        position = MapDetail.defaultLocation
                     }
         }
     }
@@ -72,9 +84,46 @@ struct MapView: View {
 
 
 #Preview {
-    MapView(position: .camera(MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 32.8236, longitude: -96.7166),
-                                             distance: 1000,
-                                             heading: 250,
-                                             pitch: 80)))
+    MapView(position: MapDetail.defaultLocation)
     .preferredColorScheme(.dark)
+}
+
+
+final class MapViewModel: NSObject, ObservableObject, CLLocationManagerDelegate{
+ 
+    var locationManager: CLLocationManager?
+    
+    func checkIfLocationServicesIsEnabled(){
+     
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager = CLLocationManager()
+            locationManager?.delegate = self
+            locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        } else {
+            print("location permission not granted")
+        }
+    }
+    
+    private func checkLocationAuthorization(){
+        
+        guard let locationManager = locationManager else {return}
+        
+        switch locationManager.authorizationStatus{
+            
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted:
+            print("Your location is restricted. Please change from setting.")
+        case .denied:
+            print("You've denied location. Please change from setting.")
+        case .authorizedAlways, .authorizedWhenInUse:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        checkLocationAuthorization()
+    }
 }
