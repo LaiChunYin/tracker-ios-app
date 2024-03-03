@@ -56,7 +56,7 @@ struct ContentView: View {
                             .sheet(isPresented: $showAddFriendForm) {
                                 AddFriendView(showAddFriendForm: $showAddFriendForm)
                                 .presentationDragIndicator(.visible)
-//                                .frame(maxWidth: .infinity, maxHeight: 30)
+                                .presentationDetents([.fraction(0.3)])
                             }
 
                             

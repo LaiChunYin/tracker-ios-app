@@ -17,7 +17,7 @@ struct AddFriendView: View {
     
     var body: some View {
         VStack {
-            Form {
+//            Form {
                 VStack(alignment: .leading) {
                     Text("User Email/Phone: ")
                     .padding(.top)
@@ -32,7 +32,7 @@ struct AddFriendView: View {
                     .frame(height: 40)
                     .padding(.trailing)
                 }
-            }
+//            }
             
             HStack {
                 Button {
