@@ -24,9 +24,17 @@ struct NotificationDetailView: View {
     var body: some View {
         VStack {
             Text("\(notification.title)")
+                .font(.title)
+                .padding(.top, 30)
+            
             Text("At: \(dateFormatter.string(from: notification.time))")
+                .font(.caption)
+                .foregroundStyle(.orange)
             Divider()
             Text("\(notification.content)")
+                .font(.footnote)
+                .padding(.horizontal, 6)
+                .multilineTextAlignment(.leading)
             
             
             switch notification.type {
@@ -72,10 +80,14 @@ struct NotificationDetailView: View {
                             Text("Reject")
                         }
                         .disabled(notification.actionTaken!)
+                        .foregroundColor(.red)
+                        .buttonStyle(.bordered)
                     }
+                    .padding(30)
                 default:
                     EmptyView()
                 }
+            Spacer()
         }
         .onAppear() {
             print("read")

@@ -44,6 +44,11 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             VStack {
+                
+                Image(systemName: "person.circle")
+                    .font(.largeTitle)
+                    .foregroundColor(.gray)
+                
 //                if let img = avatarImage {
                 if let img = avatarImage != nil ? resizeImage(image: avatarImage!, targetSize: CGSize(width: 500, height: 500)) : nil {
 //                    Image(uiImage: img)
