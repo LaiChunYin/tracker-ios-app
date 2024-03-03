@@ -91,7 +91,7 @@ struct SignUpView: View {
                         Button {
                             Task {
                                 do {
-                                    try await userViewModel.signUp(email: email, nickName: nickName, password: password, confirmPassword: confirmPassword)
+                                    try await userViewModel.signUp(email: email, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines), password: password, confirmPassword: confirmPassword)
                                 }
                                 catch let error as SignUpError {
                                     signUpError = error

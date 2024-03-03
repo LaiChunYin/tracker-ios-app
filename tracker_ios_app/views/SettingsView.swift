@@ -101,7 +101,7 @@ struct SettingsView: View {
                         print("image size after \(imgData?.count) bytes")
                         
                         
-                        try await userViewModel.updateProfile(userId: userViewModel.currentUser!.identifier, nickName: nickName, imageData: imgData)
+                        try await userViewModel.updateProfile(userId: userViewModel.currentUser!.identifier, nickName: nickName.trimmingCharacters(in: .whitespacesAndNewlines), imageData: imgData)
                         
                         sentResult = .success(())
                         showAlert.toggle()
