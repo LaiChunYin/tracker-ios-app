@@ -64,6 +64,11 @@ struct SettingsView: View {
                         Text("Remove Image")
                     }
                 }
+                else {
+                    Image(systemName: "person.circle")
+                        .font(.largeTitle)
+                        .foregroundColor(.gray)
+                }
                 
                 PhotosPicker("Upload Profile Picture", selection: $avatarItem, matching: .images)
                 .onChange(of: avatarItem) {
