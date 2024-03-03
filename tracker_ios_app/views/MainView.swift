@@ -31,7 +31,7 @@ struct MainView: View {
                     Text("Following") //Following
                 }
                 
-                FollowedByListView().environmentObject(userViewModel).tabItem {
+                FollowedByListView().environmentObject(userViewModel).environmentObject(notificationViewModel).tabItem {
                     Image(systemName: "eye")
                     Text("Followed By") //Followed By
                 }

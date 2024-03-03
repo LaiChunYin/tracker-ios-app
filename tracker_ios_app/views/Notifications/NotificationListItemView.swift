@@ -12,10 +12,6 @@ struct NotificationListItemView: View {
     
     var body: some View {
         HStack {
-//            if !notification.read {
-//                Circle().fill(Color.blue).frame(width: 10, height: 10)
-//            }
-            
             VStack(alignment: .leading) {
                 Text("\(notification.title)")
                     .foregroundStyle(notification.read ? .gray : .black)

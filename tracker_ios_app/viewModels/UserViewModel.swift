@@ -74,7 +74,8 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     }
     
     func signUp(email: String, nickName: String, password: String, confirmPassword: String) async throws {
-        guard !email.isEmpty && !nickName.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
+        let trimmedNickname = nickName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !email.isEmpty && !trimmedNickname.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
             print("empty value")
             throw SignUpError.emptyInputs
         }
@@ -100,7 +101,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         print("\(#function), \(email), \(password)")
               
         do {
-            try await authenticationService.signUp(email: email, nickName: nickName, password: password)
+            try await authenticationService.signUp(email: email, nickName: trimmedNickname, password: password)
         }
         catch let error as NSError {
             print("error in sign up \(error)")
@@ -155,7 +156,8 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     
     
     func updateProfile(userId: String, nickName: String, imageData: Data?) async throws {
-        guard !nickName.isEmpty else {
+        let trimmedNickname = nickName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedNickname.isEmpty else {
             print("nick name cannot be empty")
             throw UpdateProfileError.emptyNickName
         }
@@ -170,10 +172,10 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         
         let profilePic: String = base64Encoded 
         
-        print("updating profile, \(userId), \(nickName)")
+        print("updating profile, \(userId), \(nickName), \(trimmedNickname)")
         
         do {
-            try await userService.updateProfile(userId: userId, nickName: nickName, profilePic: profilePic)
+            try await userService.updateProfile(userId: userId, nickName: trimmedNickname, profilePic: profilePic)
         }
         catch let error {
             throw UpdateProfileError.databaseError

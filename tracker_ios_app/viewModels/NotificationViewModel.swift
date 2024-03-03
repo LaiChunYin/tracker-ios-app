@@ -102,8 +102,8 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
         notificationService.notificationRead(userId: userId, notificationId: notificationId)
     }
     
-    func rejectFollowRequest(from: String, by: String) {
-        notificationService.sendRejectedNotification(receiverId: by, by: from)
+    func rejectFollowRequest(from: String, to: String) {
+        notificationService.sendRejectedNotification(receiverId: to, by: from)
     }
     
     func actionDone(userId: String, notificationId: String) {

@@ -9,18 +9,24 @@ import SwiftUI
 import PhotosUI
 
 struct FriendListItemView: View {
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var notificationViewModel: NotificationViewModel
     private var userId: String
     var icon: String
     private var userItemSummary: UserItemSummary
     private var avatarImage: UIImage?
     private var dateFormatter: DateFormatter
+    @Binding private var showAlert: Bool
+    @Binding private var sentResult: Result<Void, UserError>?
     
 //    init(userId: String, userItemSummaryDict: [String: Any], icon: String) {
-    init(userId: String, userItemSummary: UserItemSummary, icon: String) {
+    init(userId: String, userItemSummary: UserItemSummary, icon: String = "", showAlert: Binding<Bool>, sentResult: Binding<Result<Void, UserError>?>) {
 //        do {
             self.userId = userId
             self.userItemSummary = userItemSummary
             self.icon = icon
+            self._showAlert = showAlert
+            self._sentResult = sentResult
             
             dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd-MM-yyyy HH:mm"
@@ -62,9 +68,39 @@ struct FriendListItemView: View {
                 }
                 Spacer()
                 
-                Image(systemName: icon)
-                    .font(.title)
-                    .foregroundColor(.green)
+                if(userViewModel.currentUser?.userData?.following.keys.contains(userId) ?? false){
+                    Image(systemName: icon)
+                      .font(.title)
+                      .foregroundColor(.green)
+                }
+                else {
+                    Button{
+                        Task {
+                            do {
+                                print("tyring")
+                                try await notificationViewModel.requestFollow(target: userId, by: userViewModel.currentUser!.identifier)
+                                sentResult = .success(())
+                                print("success")
+//                                sentResult = .failure(.unknown)
+                                showAlert.toggle()
+                            }
+                            catch let error as UserError {
+                                print("catching error in adding friend view")
+                                sentResult = .failure(error)
+                                showAlert.toggle()
+                            }
+                            catch let error {
+                                print("error in add friend view \(error)")
+                                sentResult = .failure(.unknown)
+                                showAlert.toggle()
+                            }
+                        }
+                    } label: {
+                        Text("Follow")
+                    }
+                    .tint(.green)
+                    .buttonStyle(.borderedProminent)
+                }
             }
             .padding(.vertical, 5)
             

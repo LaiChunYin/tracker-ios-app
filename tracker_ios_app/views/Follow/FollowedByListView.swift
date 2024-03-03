@@ -10,9 +10,11 @@ import SwiftUI
 
 struct FollowedByListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var notificationViewModel: NotificationViewModel
 //    @State private var followedByList: [String] = []
     @State private var followedByList: [(key: String, value: UserItemSummary)] = []
-    @State private var errorType: UserError? = nil
+    @State private var showAlert: Bool = false
+    @State private var sentResult: Result<Void, UserError>?
     
     var body: some View {
         NavigationView {
@@ -24,7 +26,7 @@ struct FollowedByListView: View {
                 else {
                     List {
                         ForEach(followedByList, id: \.key) { followedBy, userItemSummary in
-                            FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, icon: "location.fill")
+                            FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, showAlert: $showAlert, sentResult: $sentResult).environmentObject(userViewModel).environmentObject(notificationViewModel)
                         }
                         .onDelete { indexSet in
                             Task {
@@ -35,31 +37,44 @@ struct FollowedByListView: View {
                                     do {
                                         try await userViewModel.unfollow(followerId: userToBeDeleted, targetId: userViewModel.currentUser!.identifier, isRemovingFollower: true)
                                         followedByList.remove(at: index)
+                                        
+                                        sentResult = .success(())
+                                        showAlert.toggle()
                                     }
                                     catch let error as UserError {
-                                        errorType = error
+                                        sentResult = .failure(error)
+                                        showAlert.toggle()
                                     }
                                     catch let error {
                                         print("error in following list view \(error)")
-                                        errorType = .unknown
+                                        sentResult = .failure(.unknown)
+                                        showAlert.toggle()
                                     }
                                 }
                             }
                         }
                         .navigationTitle("Followed By") //Followed By
-                        .alert(item: $errorType) { error in
-                            let errMsg: String
-                            switch error {
-                            case .notFollowedBy:
-                                errMsg = "This user is not following you"
-                            case .invalidUser:
-                                errMsg = "User not Found"
-                            case .databaseError:
-                                errMsg = "There is an error in the database"
-                            default:
-                                errMsg = "Unknown error"
+                        .alert(isPresented: $showAlert) {
+                            switch sentResult {
+                            case .success:
+                                return Alert(title: Text("Invitation Sent"), message: Text("Waiting for the user to accept"))
+                            case .none:
+                                return Alert(title: Text("Unknown"), message: Text("Unknown"))
+                            case .failure(let error):
+                                let errMsg: String
+                                switch error {
+                                case .cannotBeYourself:
+                                    errMsg = "Cannot follow yourself"
+                                case .alreadyFollowed:
+                                    errMsg = "You have already followed this user"
+                                case .invalidUser:
+                                    errMsg = "User not Found"
+                                default:
+                                    errMsg = "Unknown error"
+                                }
+                            
+                                return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
                             }
-                            return Alert(title: Text("Failed to remove user"), message: Text(errMsg))
                         }
                     }
                 }
