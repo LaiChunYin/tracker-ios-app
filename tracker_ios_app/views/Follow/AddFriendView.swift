@@ -17,7 +17,6 @@ struct AddFriendView: View {
     
     var body: some View {
         VStack {
-//            Form {
                 VStack(alignment: .leading) {
                     Text("User Email/Phone: ")
                     .padding(.top)
@@ -35,70 +34,91 @@ struct AddFriendView: View {
 //            }
             
             HStack {
-                Button {
-                    print("add button pressed")
 
-                    Task {
-                        do {
-                            print("request sending")
-                            try await notificationViewModel.requestFollow(target: userToFollow, by: userViewModel.currentUser!.identifier)
-                            sentResult = .success(())
-                            showAlert.toggle()
-                        }
-                        catch let error as UserError {
-                            print("catching error in adding friend view")
-                            sentResult = .failure(error)
-                            showAlert.toggle()
-                        }
-                        catch let error {
-                            print("error in add friend view \(error)")
-                            sentResult = .failure(.unknown)
-                            showAlert.toggle()
-                        }
-                    }
-                } label: {
-                    Text("Invite")
-                }
-                .buttonStyle(.bordered)
-                .tint(.green)
-                .fontWeight(.semibold)
-                .alert(isPresented: $showAlert) {
-                    switch sentResult {
-                    case .success:
-                        return Alert(title: Text("Invitation Sent"), message: Text("Waiting for the user to accept"))
-                    case .none:
-                        return Alert(title: Text("Unknown"), message: Text("Unknown"))
-                    case .failure(let error):
-                        let errMsg: String
-                        switch error {
-                        case .cannotBeYourself:
-                            errMsg = "Cannot follow yourself"
-                        case .alreadyFollowed:
-                            errMsg = "You have already followed this user"
-                        case .invalidUser:
-                            errMsg = "User not Found"
-                        default:
-                            errMsg = "Unknown error"
-                        }
-                    
-                        return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
-                    }
-                }
+                inviteButton(userToFollow: $userToFollow, showAlert: $showAlert, sentResult: $sentResult)
                 
                 Spacer()
                 
-                Button {
-                    print("cancel button pressed")
-                    showAddFriendForm.toggle()
-
-                } label: {
-                    Text("Cancel")
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
-                .fontWeight(.semibold)
-                .padding()
+                cancelButton(showAddFriendForm: $showAddFriendForm)
             }
+        }
+        .padding(.horizontal)
+    }
+    
+    struct inviteButton: View {
+        @Binding var userToFollow: String
+        @Binding var showAlert: Bool
+        @Binding var sentResult: Result<Void, UserError>?
+        @EnvironmentObject var notificationViewModel: NotificationViewModel
+        @EnvironmentObject var userViewModel: UserViewModel
+        
+        var body: some View {
+            Button {
+                print("add button pressed")
+                Task {
+                    do {
+                        print("request sending")
+                        try await notificationViewModel.requestFollow(target: userToFollow, by: userViewModel.currentUser!.identifier)
+                        sentResult = .success(())
+                        showAlert.toggle()
+                    }
+                    catch let error as UserError {
+                        print("catching error in adding friend view")
+                        sentResult = .failure(error)
+                        showAlert.toggle()
+                    }
+                    catch let error {
+                        print("error in add friend view \(error)")
+                        sentResult = .failure(.unknown)
+                        showAlert.toggle()
+                    }
+                }
+            } label: {
+                Text("Invite")
+            }
+            .buttonStyle(.bordered)
+            .tint(.green)
+            .fontWeight(.semibold)
+            .alert(isPresented: $showAlert) {
+                switch sentResult {
+                case .success:
+                    return Alert(title: Text("Invitation Sent"), message: Text("Waiting for the user to accept"))
+                case .none:
+                    return Alert(title: Text("Unknown"), message: Text("Unknown"))
+                case .failure(let error):
+                    let errMsg: String
+                    switch error {
+                    case .cannotBeYourself:
+                        errMsg = "Cannot follow yourself"
+                    case .alreadyFollowed:
+                        errMsg = "You have already followed this user"
+                    case .invalidUser:
+                        errMsg = "User not Found"
+                    default:
+                        errMsg = "Unknown error"
+                    }
+                
+                    return Alert(title: Text("Failed to send Request"), message: Text(errMsg))
+                }
+            }
+        }
+    }
+    
+    struct cancelButton: View {
+        @Binding var showAddFriendForm: Bool
+        
+        var body: some View {
+            Button {
+                print("cancel button pressed")
+                showAddFriendForm.toggle()
+
+            } label: {
+                Text("Cancel")
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.red)
+            .fontWeight(.semibold)
+            .padding()
         }
     }
 }

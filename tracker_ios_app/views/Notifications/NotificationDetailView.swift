@@ -72,6 +72,8 @@ struct NotificationDetailView: View {
                             return Alert(title: Text("Failed to Accept Invitation"), message: Text(errMsg))
                         }
                         
+                        Spacer()
+                        
                         Button {
                             notificationViewModel.rejectFollowRequest(from: notification.extraData["follower"]!, by: userViewModel.currentUser!.identifier)
                             

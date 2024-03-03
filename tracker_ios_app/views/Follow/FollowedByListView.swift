@@ -24,7 +24,7 @@ struct FollowedByListView: View {
                 else {
                     List {
                         ForEach(followedByList, id: \.key) { followedBy, userItemSummary in
-                            FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, icon: "location.fill")
+                            FriendListItemView(userId: followedBy, userItemSummary: userItemSummary, icon: "")
                         }
                         .onDelete { indexSet in
                             Task {

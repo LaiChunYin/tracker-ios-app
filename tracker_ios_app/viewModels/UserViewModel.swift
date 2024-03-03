@@ -74,7 +74,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     }
     
     func signUp(email: String, nickName: String, password: String, confirmPassword: String) async throws {
-        guard !email.isEmpty && !nickName.isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
+        guard !email.isEmpty && !nickName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !password.isEmpty && !confirmPassword.isEmpty else {
             print("empty value")
             throw SignUpError.emptyInputs
         }

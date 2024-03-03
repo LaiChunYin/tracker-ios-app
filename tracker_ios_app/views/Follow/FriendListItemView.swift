@@ -10,7 +10,7 @@ import PhotosUI
 
 struct FriendListItemView: View {
     private var userId: String
-    var icon: String
+    var icon: String = ""
     private var userItemSummary: UserItemSummary
     private var avatarImage: UIImage?
     private var dateFormatter: DateFormatter
@@ -62,9 +62,20 @@ struct FriendListItemView: View {
                 }
                 Spacer()
                 
-                Image(systemName: icon)
-                    .font(.title)
-                    .foregroundColor(.green)
+                if(icon.isEmpty){
+                    
+                    Button{
+                        // write code to follow back
+                    }label: {
+                        Text("Follow")
+                    }
+                    .tint(.green)
+                    .buttonStyle(.borderedProminent)
+                }else{
+                    Image(systemName: icon)
+                          .font(.title)
+                          .foregroundColor(.green)
+                }
             }
             .padding(.vertical, 5)
             
