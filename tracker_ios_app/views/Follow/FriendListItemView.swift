@@ -111,7 +111,7 @@ struct FriendListItemView: View {
                 
                 Spacer()
                 
-                Text("connected at: \(dateFormatter.string(from: userItemSummary.connectionTime))")
+                Text("accepted: \(dateFormatter.string(from: userItemSummary.connectionTime))")
                     .font(.caption)
                     .foregroundStyle(.gray)
             }
