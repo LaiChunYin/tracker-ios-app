@@ -54,9 +54,9 @@ struct FriendListItemView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 60, height: 50)
-                            .clipShape(Ellipse())
-                            .overlay(Ellipse().stroke(Color.white, lineWidth: 2))
-                            .shadow(radius: 5)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.white, lineWidth: 2))
+//                            .shadow(radius: 5)
                     }
                     else {
                         Image(systemName: "person.crop.circle.fill")
