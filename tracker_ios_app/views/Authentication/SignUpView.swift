@@ -14,9 +14,55 @@ struct SignUpView: View {
     @State private var confirmPassword: String = ""
     
     var body: some View {
-        VStack(alignment: .center, spacing: 10) {
+        
+        GeometryReader{ geo in
+            
+            VStack(alignment: .center, spacing: 10) {
+                
+                ZStack{
+                    
+                    Image(.loginBack)
+                        .resizable()
+                        .blur(radius: 5)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .edgesIgnoringSafeArea(.all)
+                        .opacity(1)
+                        .blur(radius: 1)
+                        .clipShape(.rect(cornerRadius: 15))
+                    
+                    LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .top, endPoint: .bottom)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .opacity(0.8)
+                    
+                    VStack{
+                        Spacer()
+                        Spacer()
+                        
+                        usernameAndPassword(email: $email, password: $password, confirmPassword: $confirmPassword)
+                        
+                        Spacer()
+                        
+                        createAccountButton(userViewModel: _userViewModel, email: $email, password: $password, confirmPassword: $confirmPassword)
+                        
+                        Spacer()
+                    }
+                }
+            }
+        }
+        .edgesIgnoringSafeArea(.all)
+    }
+    
+    struct usernameAndPassword: View {
+        
+        @Binding var email: String
+        @Binding var password: String
+        @Binding var confirmPassword: String
+        
+        
+        var body: some View {
             Text("User Name")
-                .font(.largeTitle)
+                .font(.title)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
             
@@ -27,7 +73,7 @@ struct SignUpView: View {
                 .padding()
             
             Text("Password")
-                .font(.largeTitle)
+                .font(.title)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
             
@@ -38,7 +84,7 @@ struct SignUpView: View {
                 .padding()
             
             Text("Confirm Password")
-                .font(.largeTitle)
+                .font(.title)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
             
@@ -47,19 +93,26 @@ struct SignUpView: View {
                 .foregroundColor(.orange)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
                 .padding()
-            
+        }
+    }
+    
+    struct createAccountButton: View {
+        @EnvironmentObject var userViewModel: UserViewModel
+        @Binding var email: String
+        @Binding var password: String
+        @Binding var confirmPassword: String
+        
+        var body: some View {
             Button {
                 userViewModel.createAccount(email: email, password: password, confirmPassword: confirmPassword)
             } label: {
                 Text("Create Account")
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .padding(10)
-                    .background(Color.green)
-                    .cornerRadius(10)
             }
-
+            .tint(.green)
+            .buttonStyle(.borderedProminent)
         }
     }
 }

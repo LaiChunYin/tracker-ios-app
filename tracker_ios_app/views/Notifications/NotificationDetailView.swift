@@ -25,7 +25,7 @@ struct NotificationDetailView: View {
             
             Text("\(notification.title)")
                 .font(.title)
-                .padding(.top, 40)
+                .padding(.top, 30)
             
             Text("At: \(dateFormatter.string(from: notification.time))")
                 .font(.caption)
