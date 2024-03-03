@@ -51,7 +51,8 @@ struct SignUpView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .foregroundColor(.orange)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
-                            .padding()
+                            .padding(.horizontal)
+                            .padding(.bottom, 8)
                         
                         TextField("Enter your Nick Name", text: $nickName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -65,11 +66,13 @@ struct SignUpView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
                         
+                        
                         SecureField("Enter your password", text: $password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .foregroundColor(.orange)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
-                            .padding()
+                            .padding(.horizontal)
+                            .padding(.bottom, 10)
                         
                         Text("Confirm Password")
                             .font(.title)
@@ -80,9 +83,10 @@ struct SignUpView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .foregroundColor(.orange)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
-                            .padding()
+                            .padding(.horizontal)
                         
                         Spacer()
+                        
                         
                         Button {
                             Task {

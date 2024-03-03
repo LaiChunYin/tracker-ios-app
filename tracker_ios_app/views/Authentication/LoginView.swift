@@ -21,7 +21,6 @@ struct LoginView: View {
             NavigationStack {
                 
                 ZStack{
-                    Color.black
                     
                     Image(.loginBack)
                         .resizable()
@@ -56,6 +55,7 @@ struct LoginView: View {
                             .font(.largeTitle)
                             .fontWeight(.semibold)
                         
+                        
                         SecureField("Enter your password", text: $password)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .foregroundColor(.orange)
@@ -67,13 +67,17 @@ struct LoginView: View {
                             Button{
                                 rememberMe.toggle()
                             } label: {
-                                Image(systemName: rememberMe ? "checkmark.square" : "square")
-                                    .foregroundColor(rememberMe ? .blue : .gray)
-                                    .font(.system(size: 20))
+                                HStack{
+                                    Image(systemName: rememberMe ? "checkmark.square" : "square")
+                                        .foregroundColor(rememberMe ? .blue : .gray)
+                                        .font(.system(size: 20))
+                                    
+                                    Text("Remember Me")
+                                        .foregroundStyle(.gray)
+                                }
                             }
                             .buttonStyle(PlainButtonStyle())
-                            
-                            
+                        
                         }
                         
                         HStack {
