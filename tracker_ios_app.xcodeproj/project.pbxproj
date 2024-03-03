@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA8B3EDC2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = EA8B3EDB2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png */; };
 		EAC623F82B940733003C61B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EAC623F72B940733003C61B8 /* GoogleService-Info.plist */; };
 		FA45FEF72B870E4100A126A6 /* tracker_ios_app.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */; };
 		FA45FEF92B870E4100A126A6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FEF82B870E4100A126A6 /* ContentView.swift */; };
@@ -66,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EA8B3EDB2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screenshot 2024-03-03 at 2.52.20 PM.png"; sourceTree = "<group>"; };
 		EAC623F72B940733003C61B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA45FEF32B870E4100A126A6 /* tracker_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tracker_ios_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tracker_ios_app.swift; sourceTree = "<group>"; };
@@ -191,6 +193,7 @@
 		FA45FF102B870E4200A126A6 /* tracker_ios_appUITests */ = {
 			isa = PBXGroup;
 			children = (
+				EA8B3EDB2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png */,
 				FA45FF112B870E4200A126A6 /* tracker_ios_appUITests.swift */,
 				FA45FF132B870E4200A126A6 /* tracker_ios_appUITestsLaunchTests.swift */,
 			);
@@ -429,6 +432,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA8B3EDC2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
