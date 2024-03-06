@@ -16,11 +16,7 @@ struct MainView: View {
     var body: some View {
         VStack{
             TabView {
-                MapView(position: .camera(MapCamera(centerCoordinate: CLLocationCoordinate2D(latitude: 32.8236,
-                                                                                             longitude: -96.7166),
-                                                    distance: 1000,
-                                                    heading: 250,
-                                                    pitch: 80)))
+                MapView()
                 .tabItem {
                     Image(systemName: "map")
                     Text("Map") //Map

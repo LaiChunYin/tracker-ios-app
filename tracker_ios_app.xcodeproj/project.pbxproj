@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA0878D62B97B2FB00308A1B /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA0878D52B97B2FB00308A1B /* LocationHandler.swift */; };
 		EA8B3EDC2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png in Resources */ = {isa = PBXBuildFile; fileRef = EA8B3EDB2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png */; };
 		EAC623F82B940733003C61B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EAC623F72B940733003C61B8 /* GoogleService-Info.plist */; };
 		FA45FEF72B870E4100A126A6 /* tracker_ios_app.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EA0878D52B97B2FB00308A1B /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
 		EA8B3EDB2B950CE000EEDA2C /* Screenshot 2024-03-03 at 2.52.20 PM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Screenshot 2024-03-03 at 2.52.20 PM.png"; sourceTree = "<group>"; };
 		EAC623F72B940733003C61B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA45FEF32B870E4100A126A6 /* tracker_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tracker_ios_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -299,6 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				FA45FF2B2B870FA400A126A6 /* MapView.swift */,
+				EA0878D52B97B2FB00308A1B /* LocationHandler.swift */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 				FA8673E62B9171DB005E5888 /* UserService.swift in Sources */,
 				FA45FF322B87166700A126A6 /* AddFriendView.swift in Sources */,
 				FA45FFA72B8BBFB000A126A6 /* NotificationListItemView.swift in Sources */,
+				EA0878D62B97B2FB00308A1B /* LocationHandler.swift in Sources */,
 				FA45FF342B87C71D00A126A6 /* FriendListItemView.swift in Sources */,
 				FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */,
 				FA45FF282B870F9000A126A6 /* SignUpView.swift in Sources */,
@@ -638,6 +642,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"tracker_ios_app/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location permission is neccesary for app to run properly.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -666,6 +671,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"tracker_ios_app/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location permission is neccesary for app to run properly.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
