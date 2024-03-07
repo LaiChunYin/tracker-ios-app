@@ -64,14 +64,27 @@ struct FriendListItemView: View {
                 
                 if(icon.isEmpty){
                     
-                    Button{
-                        // write code to follow back
-                    }label: {
-                        Text("Follow")
+                    HStack{
+                        Button{
+                            // MARK: write code to follow back
+                        }label: {
+                            Text("Follow")
+                        }
+                        .tint(.green)
+                        .buttonStyle(.borderedProminent)
+                        
+                        Button{
+                            // MARK: write code to add to selected share
+                        }label: {
+                            Image(systemName: "shareplay")
+                                  .font(.title3)
+                                  .foregroundColor(.white)
+                        }
+                        .tint(.purple)
+                        .buttonStyle(.borderedProminent)
                     }
-                    .tint(.green)
-                    .buttonStyle(.borderedProminent)
                 }else{
+                   
                     Image(systemName: icon)
                           .font(.title)
                           .foregroundColor(.green)

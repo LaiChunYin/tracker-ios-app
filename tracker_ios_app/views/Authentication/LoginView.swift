@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var rememberMe: Bool = false
     @State private var viewSelection: Int? = nil
     @State private var loginError: LoginError? = nil
+    @ObservedObject var locationsHandler = LocationsHandler()
     
     var body: some View {
         GeometryReader{ geo in
