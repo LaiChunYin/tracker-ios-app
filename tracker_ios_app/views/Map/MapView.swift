@@ -31,12 +31,9 @@ struct MapView: View {
             Map(position: $position){
 //                ForEach(0..<4) { _ in      // MARK: loop here for multiple annotation
                     Annotation("final boss", coordinate: CLLocationCoordinate2D(latitude: location?.coordinate.latitude ?? 0, longitude: location?.coordinate.longitude ?? 0)){
-                        Image(systemName: "mappin")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 40)
-                            .shadow(color: .white, radius: 3)
-                            .scaleEffect(x: -1)
+                        Image(systemName: "circlebadge.fill")
+                            .foregroundStyle(.red)
+                            .symbolEffect(.pulse)
                     }
 //              }
             }
@@ -101,12 +98,12 @@ struct MapView: View {
             }
             .onAppear{
                 Task{
-                    // MARK: Run query here to store data in firebase
+                    // MARK: Run query here to store user location in firebase
                     try? Tips.configure()
                     print("onAppear started")
                     locationsHandler.startLocationUpdates()
                     for try await update in locationsHandler.updates{
-                        print("my location is : \(update.location)")
+                        print("my location is : \(String(describing: update.location))")
                         location = update.location
                         print("latitude : \(location?.coordinate.latitude)")
                         print("longitude : \(location?.coordinate.longitude)")
@@ -159,8 +156,8 @@ struct GridPattern: View {
     var body: some View {
         GeometryReader { geometry in
             Path { path in
-                let rows = 5
-                let cols = 5
+                let rows = 12
+                let cols = 6
                 let rowSpacing = geometry.size.height / CGFloat(rows)
                 let colSpacing = geometry.size.width / CGFloat(cols)
                 
