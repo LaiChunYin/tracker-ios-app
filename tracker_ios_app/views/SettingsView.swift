@@ -62,6 +62,7 @@ struct SettingsView: View {
                                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
                                     .shadow(radius: 5)
                                 
+                                
                                 Button {
                                     avatarImage = nil
                                 } label: {

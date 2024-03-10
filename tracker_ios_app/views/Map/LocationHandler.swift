@@ -17,6 +17,7 @@ class LocationsHandler: ObservableObject {
     init() {
         self.manager = CLLocationManager() // Safe to call in MainActor
         self.manager.requestWhenInUseAuthorization()
+        self.manager.requestAlwaysAuthorization()
     }
     
     func startLocationUpdates() {

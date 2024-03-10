@@ -109,7 +109,9 @@ struct ContentView: View {
                 LoginView()
             }
         }
-
+        .onAppear{  // for debugging purposes
+                print("ContentView: \(userViewModel.currentUser)")
+        }
     }
 }
 

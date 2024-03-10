@@ -11,7 +11,7 @@ struct LoginView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var email: String = "test5@gmail.com"
     @State private var password: String = "11111111"
-    @State private var rememberMe: Bool = false
+    @State private var rememberMe: Bool = true
     @State private var viewSelection: Int? = nil
     @State private var loginError: LoginError? = nil
     @ObservedObject var locationsHandler = LocationsHandler()
@@ -31,7 +31,6 @@ struct LoginView: View {
                         .opacity(1)
                         .blur(radius: 1)
                         .clipShape(.rect(cornerRadius: 15))
-                        
                     
                     LinearGradient(gradient: Gradient(colors: [.black, .clear]), startPoint: .top, endPoint: .bottom)
                         .frame(width: geo.size.width*1.1, height: geo.size.height*1.2)
@@ -64,22 +63,21 @@ struct LoginView: View {
                             .padding()
                             .padding(.bottom, 20)
                         
-                        HStack {
-                            Button{
-                                rememberMe.toggle()
-                            } label: {
-                                HStack{
-                                    Image(systemName: rememberMe ? "checkmark.square" : "square")
-                                        .foregroundColor(rememberMe ? .blue : .gray)
-                                        .font(.system(size: 20))
-                                    
-                                    Text("Remember Me")
-                                        .foregroundStyle(.gray)
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        
-                        }
+//                        HStack {
+//                            Button{
+//                                rememberMe.toggle()
+//                            } label: {
+//                                HStack{
+//                                    Image(systemName: rememberMe ? "checkmark.square" : "square")
+//                                        .foregroundColor(rememberMe ? .blue : .gray)
+//                                        .font(.system(size: 20))
+//                                    
+//                                    Text("Remember Me")
+//                                        .foregroundStyle(.gray)
+//                                }
+//                            }
+//                            .buttonStyle(PlainButtonStyle())
+//                        }
                         
                         HStack {
                             Button {
@@ -135,12 +133,9 @@ struct LoginView: View {
                     }
                     .padding(.horizontal, 20)
                 }
-                
             }
         }.edgesIgnoringSafeArea(.all)
-        
     }
-        
 }
 
 //#Preview {

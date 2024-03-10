@@ -75,6 +75,7 @@
 		EA8D3BE12B991A4100C8E61E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/extra/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EA8D3BE32B99309600C8E61E /* SelectedShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedShareView.swift; sourceTree = "<group>"; };
 		EA8D3BE62B99356000C8E61E /* MapTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTip.swift; sourceTree = "<group>"; };
+		EAFFA8452B9D430D00CE2252 /* tracker-ios-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "tracker-ios-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		FA45FEF32B870E4100A126A6 /* tracker_ios_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tracker_ios_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tracker_ios_app.swift; sourceTree = "<group>"; };
 		FA45FEF82B870E4100A126A6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -175,6 +176,7 @@
 		FA45FEF52B870E4100A126A6 /* tracker_ios_app */ = {
 			isa = PBXGroup;
 			children = (
+				EAFFA8452B9D430D00CE2252 /* tracker-ios-app-Info.plist */,
 				FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */,
 				FA45FF242B870EB800A126A6 /* repositories */,
 				FA45FF222B870E6700A126A6 /* services */,
@@ -658,7 +660,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"tracker_ios_app/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location permission is neccesary for app to run properly.";
+				INFOPLIST_FILE = "tracker-ios-app-Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "location needed";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This allows app to track and share location when in background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This allows app to track and share location.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -687,7 +692,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"tracker_ios_app/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "location permission is neccesary for app to run properly.";
+				INFOPLIST_FILE = "tracker-ios-app-Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "location needed";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This allows app to track and share location when in background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This allows app to track and share location.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

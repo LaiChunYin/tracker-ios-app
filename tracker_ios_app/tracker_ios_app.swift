@@ -79,6 +79,9 @@ struct tracker_ios_app: App {
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(userViewModel).environmentObject(notificationViewModel)
+                .onAppear{ // for debugging purposes
+                    print("ios_app: \(userViewModel.currentUser)")
+                }
         }
         .onChange(of: scenePhase) { currentPhase in
             switch scenePhase {
