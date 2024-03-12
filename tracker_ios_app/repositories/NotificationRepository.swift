@@ -30,12 +30,12 @@ class NotificationRepository {
             
             snapshot.documentChanges.forEach{ (docChange) in
                 do{
-                    var notification = try docChange.document.data(as: Notification.self)
+                    let notification = try docChange.document.data(as: Notification.self)
                     let notificationId = docChange.document.documentID
     
                     print("getting notification id \(notificationId) ")
                     
-                    let changeType: NotificationChangeType
+                    let changeType: DataChangeType
                     switch docChange.type {
                         case .added:
                             changeType = .added

@@ -43,42 +43,44 @@ struct tracker_ios_app: App {
     private let db: Firestore    
     private let userRepository: UserRepository
     private let notificationRepository: NotificationRepository
+    private let locationRepository: LocationRepository
     
     private let authenticationService: AuthenticationService
     private let userService: UserService
     private let preferenceService: PreferenceService
     private let notificationService: NotificationService
-//    private let weatherService: WeatherService
+    private let locationService: LocationService
+    private let weatherService: WeatherService
     
     private let userViewModel: UserViewModel
     private let notificationViewModel: NotificationViewModel
+    private let locationViewModel: LocationViewModel
     
     init() {
         FirebaseApp.configure()
         
-//        self.db = Firestore.firestore()
-//        self.userRepository = UserRepository(db: db)
-//        self.preferenceService = PreferenceService()
-//        self.userViewModel = UserViewModel(db: db, preferenceService: preferenceService)
-//        self.notificationViewModel = NotificationViewModel(db: db, userViewModel: userViewModel)
-        
         self.db = Firestore.firestore()
         self.userRepository = UserRepository(db: db)
         self.notificationRepository = NotificationRepository(db: db)
+        self.locationRepository = LocationRepository(db: db)
         
         self.preferenceService = PreferenceService()
         self.notificationService = NotificationService(notificationRepository: notificationRepository)
         self.authenticationService = AuthenticationService(preferenceService: preferenceService, notificationService: notificationService, userRepository: userRepository, notificationRepository: notificationRepository)
         self.userService = UserService(userRepository: userRepository, authenticationService: authenticationService, notificationService: notificationService)
+        self.locationService = LocationService(locationRepository: locationRepository, userService: userService)
+        self.weatherService = WeatherService()
         
-        self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService)
+        self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService, locationService: locationService)
         self.notificationViewModel = NotificationViewModel(userService: userService, notificationService: notificationService, authenticationService: authenticationService)
+        self.locationViewModel = LocationViewModel(locationService: locationService, weatherService: weatherService)
     }
     
     @Environment(\.scenePhase) var scenePhase
     var body: some Scene {
         WindowGroup {
             ContentView().environmentObject(userViewModel).environmentObject(notificationViewModel)
+                .environmentObject(locationViewModel)
         }
         .onChange(of: scenePhase) { currentPhase in
             switch scenePhase {

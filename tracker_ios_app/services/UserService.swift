@@ -10,10 +10,11 @@ import FirebaseFirestore
 
 class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidationDelegate {
     weak var userServiceDelegate: UserServiceDelegate?
+    weak var updateFollowingLocationsDelegate: UpdateFollowingLocationsDelegate?
     private var authenticationService: AuthenticationService
     private var userRepository: UserRepository
     private var notificationService: NotificationService
-    private var currentUser: AppUser? = nil
+    var currentUser: AppUser? = nil
     
     init(userRepository: UserRepository, authenticationService: AuthenticationService, notificationService: NotificationService) {
         self.userRepository = userRepository
@@ -29,12 +30,21 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         print("in auth service update user on change")
         self.currentUser = user
         userServiceDelegate?.onUserInit(user: user)
+//        updateFollowingLocationsDelegate?.onFollowerUpdated(userId: user.identifier)
+        if let userData = self.currentUser?.userData {
+            updateFollowingLocationsDelegate?.onFollowerUpdated(userData: userData)
+        }
     }
     
     func onUserUpdate(userData: UserData) {
         print("in auth service update user on change")
         self.currentUser?.userData = userData
         userServiceDelegate?.onUserUpdate(userData: userData)
+        
+        if let userData = self.currentUser?.userData {
+//            updateFollowingLocationsDelegate?.onFollowerUpdated(userId: user.identifier)
+            updateFollowingLocationsDelegate?.onFollowerUpdated(userData: userData)
+        }
     }
     
     func follow(followerId: String, targetId: String) async throws {

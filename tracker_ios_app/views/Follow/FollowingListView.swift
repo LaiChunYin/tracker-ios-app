@@ -23,7 +23,7 @@ struct FollowingListView: View {
                 else {
                     List {
                         ForEach(followings, id: \.key) { follower, userItemSummary in
-                            FriendListItemView(userId: follower, userItemSummary: userItemSummary, icon: "location.magnifyingglass", showAlert: $showAlert, sentResult: $sentResult)
+                            FriendListItemView(userId: follower, userItemSummary: userItemSummary, icon: "location.viewfinder", showAlert: $showAlert, sentResult: $sentResult)
                         }
                         .onDelete { indexSet in
                             Task {

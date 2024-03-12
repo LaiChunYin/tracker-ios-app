@@ -37,7 +37,25 @@ protocol UserRepositoryDelegate: AnyObject {
 }
 
 protocol NotificationRepositoryDelegate: AnyObject {
-    func onNotificationChange(type: NotificationChangeType, notificationId: String, notification: Notification)
+    func onNotificationChange(type: DataChangeType, notificationId: String, notification: Notification)
+}
+
+protocol LocationRepositoryDelegate: AnyObject {
+//    func onLocationChange(type: DataChangeType, wayPointId: String, wayPoint: Waypoint)
+    func onLocationChange(type: DataChangeType, userId: String, wayPoint: Waypoint)
+}
+
+protocol LocationServiceDelegate: AnyObject {
+    func onLocationInit(userId: String)
+    func onLocationAdded(userId: String, waypoint: Waypoint)
+//    func onSelfLocationUpdated(currentLocation: CLLocation)
+    func onSelfLocationUpdated(waypoints: [Waypoint])
+//    func onLocationRemoved(userId: String, waypoint: Waypoint)
+}
+
+protocol UpdateFollowingLocationsDelegate: AnyObject {
+//    func onFollowerUpdated(userId: String)
+    func onFollowerUpdated(userData: UserData)
 }
 
 //protocol CastableError {

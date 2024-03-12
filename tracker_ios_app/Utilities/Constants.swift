@@ -34,6 +34,7 @@ struct FireBaseCollections {
 
 struct UserDataSubcollections {
     static let COLLECTION_NOTIFICATION = "Notifications"
+    static let COLLECTION_WAYPOINT = "WayPoints"
 }
 
 struct UserDataFields {
@@ -49,7 +50,7 @@ struct NotificationFields {
     static let ACTION_TAKEN = "actionTaken"
 }
 
-enum NotificationChangeType {
+enum DataChangeType {
     case added
     case updated
     case removed

@@ -18,7 +18,7 @@ class NotificationService: NotificationRepositoryDelegate {
         self.notificationRepository.notificationRepositoryDelegate = self
     }
     
-    func onNotificationChange(type: NotificationChangeType, notificationId: String, notification: Notification) {
+    func onNotificationChange(type: DataChangeType, notificationId: String, notification: Notification) {
         print("in notification service update on change")
         switch type {
             case .added:

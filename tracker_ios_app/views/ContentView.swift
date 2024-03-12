@@ -11,6 +11,7 @@ struct ContentView: View {
 //    @StateObject var userViewModel = UserViewModel()
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var notificationViewModel: NotificationViewModel
+    @EnvironmentObject var locationViewModel: LocationViewModel
     @State private var showAddFriendForm: Bool = false
     @State var rootScreen: RootViews = .main
     @State var viewSelection: Int? = nil
@@ -108,6 +109,15 @@ struct ContentView: View {
             else {
                 LoginView()
             }
+        }
+        .onAppear() {
+//            locationViewModel.startLocationUpdate()
+            
+//            Task {
+//                DispatchQueue.main.async {
+//                    locationViewModel.startLocationUpdate()
+//                }
+//            }
         }
 
     }

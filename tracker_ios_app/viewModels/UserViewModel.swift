@@ -12,6 +12,7 @@ import FirebaseAuth
 class UserViewModel: ObservableObject, UserServiceDelegate {
     private var authenticationService: AuthenticationService
     private var preferenceService: PreferenceService
+    private var locationService: LocationService
     private var userService: UserService
     @Published var currentUser: AppUser? = nil
     lazy var rememberMe: Bool? = preferenceService.isRememberLoginStatus
@@ -19,10 +20,11 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     private var userListener: ListenerRegistration? = nil
     private var notificationsListener: ListenerRegistration? = nil
     
-    init(authenticationService: AuthenticationService, preferenceService: PreferenceService, userService: UserService){
+    init(authenticationService: AuthenticationService, preferenceService: PreferenceService, userService: UserService, locationService: LocationService){
         self.authenticationService = authenticationService
         self.preferenceService = preferenceService
         self.userService = userService
+        self.locationService = locationService
         
 //        self.authenticationService.authServiceDelegate = self
         self.userService.userServiceDelegate = self
@@ -49,10 +51,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
             throw LoginError.emptyUsernameOrPwd
         }
         
-        // TODO: check wrong password
-        
-        // TODO: check invalid user
-        
         do {
             try await authenticationService.signIn(email: email, password: password)
             self.preferenceService.isRememberLoginStatus = rememberMe
@@ -65,6 +63,7 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     
     func logout() {
         do{
+            locationService.resetLocationService()
             try authenticationService.signOut()
             self.currentUser = nil
         }
@@ -92,7 +91,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
 //            return .failure(SignUpError.alreadyExist)
 //        }
         
-        // TODO: check if user already exist
         guard !(await userService.checkUserExistence(userId: email)) else {
             print("user already exist")
             throw SignUpError.alreadyExist
@@ -112,7 +110,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     
     
     func follow(followerId: String, targetId: String) async throws {
-        // TODO: check if the target is already followed
         guard !userService.isCurrentUserFollowedBy(userId: followerId) else {
             throw UserError.alreadyFollowed
         }
@@ -132,7 +129,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     }
     
     func unfollow(followerId: String, targetId: String, isRemovingFollower: Bool) async throws {
-        // TODO: check if the target is already unfollowed
         guard !isRemovingFollower || userService.isCurrentUserFollowedBy(userId: followerId) else {
             throw UserError.notFollowing
         }

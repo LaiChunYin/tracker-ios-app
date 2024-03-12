@@ -83,13 +83,11 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
         let target = target.lowercased()
         print("target after \(target)")
         
-        // TODO: check if the target user exist
         guard await userService.checkUserExistence(userId: target) else {
             print("in notification view model, user does not exist")
             throw UserError.invalidUser
         }
         
-        // TODO: check if the target is already followed
         guard !userDataValidationDelegate!.isCurrentUserFollowing(userId: target) else {
             throw UserError.alreadyFollowed
         }

@@ -119,10 +119,11 @@ class AuthenticationService {
         
         self.authServiceDelegate?.onUserInit(user: user)
         self.notificationInitDelegate?.onNotificationInit()
-        
+        print("here 0")
         self.userListener = self.userRepository.listenToUserChanges(userId: user.identifier)
-        
+        print("here 1")
         self.notificationsListener = self.notificationRepository.listenToNotificationChanges(userId: user.identifier)
+        print("init data done")
     }
     
     func resetListeners() {

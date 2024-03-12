@@ -15,6 +15,8 @@ struct SettingsView: View {
     @State private var avatarImage: UIImage?
     @State private var showAlert: Bool = false
     @State private var sentResult: Result<Void, UpdateProfileError>? = nil
+    @State private var trackingFrequency: Double = 5
+    private var frequencyOptions = [1/30, 2, 5, 10]
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
@@ -105,6 +107,12 @@ struct SettingsView: View {
                  }
                  .padding([.horizontal, .top])
                 
+                Picker("Location Update Frequency", selection: $trackingFrequency) {
+                    ForEach(frequencyOptions, id: \.self) { freq in
+                        Text("\(freq) min").tag(freq)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
                 
                 Button {
                     Task {

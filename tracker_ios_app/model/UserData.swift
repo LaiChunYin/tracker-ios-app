@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestoreSwift
 import FirebaseAuth
+import CoreLocation
 
 struct Address: Codable {
     let street: String
@@ -16,11 +17,17 @@ struct Address: Codable {
     let country: String
 }
 
-struct Waypoint: Codable {
+struct Waypoint: Codable, Equatable {
     let longitude: Double
-    let latittude: Double
-    let address: Address
+    let latitude: Double
     let time: Date
+    
+    init(location: CLLocation) {
+        print("getting waypoint at \(location.timestamp), now is \(Date.now)")
+        self.longitude = Double(location.coordinate.longitude)
+        self.latitude = Double(location.coordinate.latitude)
+        self.time = location.timestamp
+    }
 }
 
 
@@ -29,7 +36,6 @@ struct UserData: Codable {
     var isConnected: Bool = false
     var nickName: String = ""
     var profilePic: String = ""
-    var path: [Waypoint] = []
     var following: [String: UserItemSummary] = [:]
     var followedBy: [String: UserItemSummary] = [:]
     
@@ -53,6 +59,7 @@ struct AppUser {
     let accountData: User
     var userData: UserData? = nil
     var notifications: [Notification] = []
+    var locations: [Waypoint] = []
     
     var identifier: String {
         get {
