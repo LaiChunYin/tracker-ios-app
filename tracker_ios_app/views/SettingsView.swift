@@ -107,12 +107,12 @@ struct SettingsView: View {
                  }
                  .padding([.horizontal, .top])
                 
-                Picker("Location Update Frequency", selection: $trackingFrequency) {
-                    ForEach(frequencyOptions, id: \.self) { freq in
-                        Text("\(freq) min").tag(freq)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
+//                Picker("Location Update Frequency", selection: $trackingFrequency) {
+//                    ForEach(frequencyOptions, id: \.self) { freq in
+//                        Text("\(freq) min").tag(freq)
+//                    }
+//                }
+//                .pickerStyle(SegmentedPickerStyle())
                 
                 Button {
                     Task {
