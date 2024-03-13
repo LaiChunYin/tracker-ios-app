@@ -25,6 +25,7 @@ struct MapView: View {
     @State private var showMapAnnotation = false
     @State private var showAlert = false
     @State private var locationError: LocationServiceError? = nil
+    @State private var showPath = false
     
     init() {
         dateFormatter = DateFormatter()
@@ -37,14 +38,18 @@ struct MapView: View {
                 
                 if showMapAnnotation && userViewModel.currentUser != nil {
                     // Path of the current user
-                    MapPolyline(coordinates: locationViewModel.locationSnapshots.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-                        .stroke(.blue, lineWidth: 2.0)
+                    if showPath {
+                        MapPolyline(coordinates: locationViewModel.locationSnapshots.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
+                            .stroke(.blue, lineWidth: 2.0)
+                    }
                     
                     
                     // Paths of the following users
                     ForEach(Array(locationViewModel.snapshotsOfFollowings), id: \.key) { userId, waypoints in
-                        MapPolyline(coordinates: waypoints.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-                            .stroke(.green, lineWidth: 2.0)
+                        if showPath {
+                            MapPolyline(coordinates: waypoints.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
+                                .stroke(.green, lineWidth: 2.0)
+                        }
                         
                         if let lastestLocation = waypoints.last, let nickName = userViewModel.currentUser?.userData?.following[userId]?.nickName {
                             Annotation("\(nickName) at \(dateFormatter.string(from: lastestLocation.time))", coordinate: CLLocationCoordinate2D(latitude: waypoints.last!.latitude, longitude: waypoints.last!.longitude)) {
@@ -85,6 +90,20 @@ struct MapView: View {
             .toolbarBackground(.automatic)
             .overlay(alignment: .bottomTrailing){
                 VStack {
+                    Button {
+                        showPath.toggle()
+                    } label: {
+                        Image(systemName: "mappin.and.ellipse")
+                            .font(.largeTitle)
+                            .foregroundColor(showPath ? .green : .red)
+                            .imageScale(.small)
+                            .padding(10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(.circle)
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 5)
+                    }
+                    
                     Button{
 //                        Task{
 //                            share.toggle()
