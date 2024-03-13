@@ -30,15 +30,12 @@ struct MapView: View {
         dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
     }
-    
-    
-//    var body: some View {Text("testing map")}
         
     var body: some View {
         GeometryReader{ geo in
             Map(position: $position){
                 
-                if showMapAnnotation {
+                if showMapAnnotation && userViewModel.currentUser != nil {
                     // Path of the current user
                     MapPolyline(coordinates: locationViewModel.locationSnapshots.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
                         .stroke(.blue, lineWidth: 2.0)

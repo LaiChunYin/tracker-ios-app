@@ -17,6 +17,8 @@ struct LoginView: View {
     @State private var loginError: LoginError? = nil
     
     var body: some View {
+//        Text("for testing, delete this: \(Auth.auth().currentUser?.email ?? "nil")")
+        
         GeometryReader{ geo in
             
             NavigationStack {

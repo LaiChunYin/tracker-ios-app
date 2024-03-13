@@ -68,6 +68,37 @@ class AuthenticationService {
         }
     }
     
+    /*
+     3 cases:
+     1. No firebase session - login required
+     2. Has fireabse session and remember me is true - auto sign
+     3. Has fireabse session but remember me is false - logout the user and then require login again
+    */
+    func autoSignInIfEnabled() {
+        do {
+            print("fire auth current user, \(Auth.auth().currentUser)")
+            let fireAuthCurrentUser = Auth.auth().currentUser
+            
+            guard fireAuthCurrentUser != nil else {
+                print("no firebase session, please login again")
+                return
+            }
+            
+            // Auto login
+            if preferenceService.isRememberLoginStatus, let userAccount = fireAuthCurrentUser {
+                print("auto login, \(userAccount.uid)")
+                self.initializeData(user: AppUser(accountData: userAccount))
+                return
+            }
+            
+            print("remember me no selected, please login again")
+            try self.signOut()
+        }
+        catch let error {
+            print("error in auto sign in \(error)")
+        }
+    }
+    
     func signIn(email : String, password : String) async throws {
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in

@@ -75,6 +75,8 @@ struct tracker_ios_app: App {
         self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService, locationService: locationService)
         self.notificationViewModel = NotificationViewModel(userService: userService, notificationService: notificationService, authenticationService: authenticationService)
         self.locationViewModel = LocationViewModel(locationService: locationService, weatherService: weatherService)
+        
+        authenticationService.autoSignInIfEnabled()
     }
     
     @Environment(\.scenePhase) var scenePhase

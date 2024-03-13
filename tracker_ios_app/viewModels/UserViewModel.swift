@@ -64,8 +64,8 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
     func logout() {
         do{
             locationService.resetLocationService()
-            try authenticationService.signOut()
             self.currentUser = nil
+            try authenticationService.signOut()
         }
         catch let err as NSError{
             print(#function, "Unable to sign out the user : \(err)")

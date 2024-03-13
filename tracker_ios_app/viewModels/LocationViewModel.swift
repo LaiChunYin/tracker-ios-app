@@ -101,7 +101,11 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     
     func getLocationDetails(latitude: Double, longitude: Double) async {
         do {
-            self.currentWeather = try await weatherService.getWeatherFromAPI(latitude: latitude, longitude: longitude)
+            let weather = try await weatherService.getWeatherFromAPI(latitude: latitude, longitude: longitude)
+            
+            DispatchQueue.main.async {
+                self.currentWeather = weather
+            }
         }
         catch let error {
             print("cannot get weather \(error)")
