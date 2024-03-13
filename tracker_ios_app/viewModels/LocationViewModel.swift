@@ -14,6 +14,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     @Published var locationSnapshots: [Waypoint] = []
     @Published var snapshotsOfFollowings: [String: [Waypoint]] = [:]
     @Published var currentWeather: Weather? = nil
+    @Published var displayingLocation: Waypoint? = nil
     private var locationService: LocationService
     private var weatherService: WeatherService
     private let maxTimeDiffBetween2Points: Double = 60
@@ -156,5 +157,10 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         catch let error {
             print("cannot get weather \(error)")
         }
+    }
+    
+    func focusAt(location: Waypoint?) {
+        print("changing focus")
+        displayingLocation = location
     }
 }

@@ -52,6 +52,7 @@ struct tracker_ios_app: App {
     private let locationService: LocationService
     private let weatherService: WeatherService
     
+    private let sharedViewModel: SharedViewModel
     private let userViewModel: UserViewModel
     private let notificationViewModel: NotificationViewModel
     private let locationViewModel: LocationViewModel
@@ -72,6 +73,7 @@ struct tracker_ios_app: App {
         self.locationService = LocationService(locationRepository: locationRepository, userService: userService)
         self.weatherService = WeatherService()
         
+        self.sharedViewModel = SharedViewModel()
         self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService, locationService: locationService)
         self.notificationViewModel = NotificationViewModel(userService: userService, notificationService: notificationService, authenticationService: authenticationService)
         self.locationViewModel = LocationViewModel(locationService: locationService, weatherService: weatherService)
@@ -84,6 +86,7 @@ struct tracker_ios_app: App {
         WindowGroup {
             ContentView().environmentObject(userViewModel).environmentObject(notificationViewModel)
                 .environmentObject(locationViewModel)
+                .environmentObject(sharedViewModel)
         }
     }
 }

@@ -52,6 +52,7 @@
 		FAC6330B2B9E4E030071CC8B /* LocationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC6330A2B9E4E030071CC8B /* LocationDetailsView.swift */; };
 		FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */; };
 		FAC633B02BA20B610071CC8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */; };
+		FAC633B42BA242740071CC8B /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC633B32BA242740071CC8B /* SharedViewModel.swift */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +120,7 @@
 		FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAC633AE2BA209970071CC8B /* tracker-ios-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "tracker-ios-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		FAC633B32BA242740071CC8B /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -219,6 +221,7 @@
 				FA45FF9B2B8AA89500A126A6 /* UserViewModel.swift */,
 				FA45FFA12B8BB3FE00A126A6 /* NotificationViewModel.swift */,
 				FA8673F52B9A66B7005E5888 /* LocationViewModel.swift */,
+				FAC633B32BA242740071CC8B /* SharedViewModel.swift */,
 			);
 			path = viewModels;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				FA8673FA2B9A697A005E5888 /* MapTip.swift in Sources */,
 				FA45FF9C2B8AA89500A126A6 /* UserViewModel.swift in Sources */,
 				FA45FF2E2B870FAD00A126A6 /* FollowingListView.swift in Sources */,
+				FAC633B42BA242740071CC8B /* SharedViewModel.swift in Sources */,
 				FA45FF9A2B8AA62500A126A6 /* NotificationListView.swift in Sources */,
 				FA8673E82B9264C1005E5888 /* ErrorHelper.swift in Sources */,
 				FAC6330B2B9E4E030071CC8B /* LocationDetailsView.swift in Sources */,

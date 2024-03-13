@@ -11,6 +11,8 @@ import PhotosUI
 struct FriendListItemView: View {
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var notificationViewModel: NotificationViewModel
+    @EnvironmentObject private var sharedViewModel: SharedViewModel
+    @EnvironmentObject private var locationViewModel: LocationViewModel
     private var userId: String
     var icon: String
     private var userItemSummary: UserItemSummary
@@ -72,6 +74,11 @@ struct FriendListItemView: View {
                     Image(systemName: icon)
                       .font(.title)
                       .foregroundColor(.green)
+                      .onTapGesture {
+                          print("go to user")
+                          sharedViewModel.tabSelection = 0  // go to map
+                          locationViewModel.focusAt(location: locationViewModel.snapshotsOfFollowings[userId]!.last)
+                      }
                 }
                 else {
                     Button{

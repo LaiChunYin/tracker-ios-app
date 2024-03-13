@@ -32,6 +32,17 @@ struct MapView: View {
         dateFormatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
     }
         
+    func adjustCameraPosition(waypoint: Waypoint?) {
+        guard waypoint != nil else {
+            self.position = .automatic
+            return
+        }
+        
+        let center = CLLocationCoordinate2D(latitude: waypoint!.latitude, longitude: waypoint!.longitude)
+        let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+        self.position = .region(MKCoordinateRegion(center: center, span: span))
+    }
+    
     var body: some View {
         GeometryReader{ geo in
             Map(position: $position){
@@ -91,6 +102,21 @@ struct MapView: View {
             .overlay(alignment: .bottomTrailing){
                 VStack {
                     Button {
+                        print("reset camera location")
+                        adjustCameraPosition(waypoint: locationViewModel.currentLocation!)
+                    } label: {
+                        Image(systemName: "arrow.counterclockwise")
+                            .font(.largeTitle)
+                            .foregroundColor(.purple)
+                            .imageScale(.small)
+                            .padding(10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(.circle)
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 5)
+                    }
+                    
+                    Button {
                         showPath.toggle()
                     } label: {
                         Image(systemName: "mappin.and.ellipse")
@@ -105,19 +131,6 @@ struct MapView: View {
                     }
                     
                     Button{
-//                        Task{
-//                            share.toggle()
-//                            if(shareColor == .red){
-//                                print("Location sharing is on") // MARK: START SHARING LOCATION WITH OTHERS
-//                            }else{
-//                                print("Location sharing is off") // // MARK: STOP SHARING LOCATION WITH OTHERS
-//                            }
-//                            shareColor = (shareColor == .green) ? .red : .green
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-//                                share.toggle()
-//                            }
-//                        }
-                        
                         Task{
                             // toggle twice to make a flashing effect
                             isFlashActive.toggle()
@@ -190,28 +203,6 @@ struct MapView: View {
                }
                 .frame(width: geo.size.width, height: geo.size.height)
             }
-//            .onAppear{
-//                print("start location update")
-//                print("snapshot of following \(locationViewModel.snapshotsOfFollowings)")
-//                
-//                do {
-//                    try locationViewModel.startLocationUpdates()
-//                    
-//                    if isSharing {
-//                        print("share location by default")
-//                        locationViewModel.startSavingSnapshots(userId: userViewModel.currentUser!.identifier)
-//                    }
-//                }
-//                catch let error as LocationServiceError {
-//                    print("cannot start location updates: \(error)")
-//                    
-//                    showAlert.toggle()
-//                    locationError = error
-//                }
-//                catch let error {
-//                    print("unknown location error: \(error)")
-//                }
-//            }
         }
             .edgesIgnoringSafeArea(.all)
             .alert(isPresented: $showAlert) {
@@ -245,6 +236,14 @@ struct MapView: View {
                 catch let error {
                     print("unknown location error: \(error)")
                 }
+                
+                if let displayLocation = locationViewModel.displayingLocation {
+                    print("displaying location is \(displayLocation)")
+                    adjustCameraPosition(waypoint: displayLocation)
+                    // resetting displaying location
+                    locationViewModel.focusAt(location: nil)
+                }
+                
                 
                 // delay the map annotations. If showing the annotations immediately after clicking the login button, the application will not be able to make connection with FireAuth for unknown reason
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
