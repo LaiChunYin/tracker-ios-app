@@ -14,10 +14,10 @@ struct NotificationListItemView: View {
         HStack {
             VStack(alignment: .leading) {
                 Text("\(notification.title)")
-                    .foregroundStyle(notification.read ? .gray : .black)
+                    .foregroundStyle(notification.read ? .gray : .orange)
                 Text("\(notification.content)")
                     .font(Font(CTFont(.application, size: 15)))
-                    .foregroundStyle(notification.read ? .gray : .black)
+                    .foregroundStyle(notification.read ? .gray : .orange)
             }
         }
     }

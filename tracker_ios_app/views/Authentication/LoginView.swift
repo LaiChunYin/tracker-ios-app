@@ -10,8 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var locationViewModel: LocationViewModel
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @State private var email: String = "Test@gmail.com"
+    @State private var password: String = "11111111"
     @State private var rememberMe: Bool = false
     @State private var viewSelection: Int? = nil
     @State private var loginError: LoginError? = nil

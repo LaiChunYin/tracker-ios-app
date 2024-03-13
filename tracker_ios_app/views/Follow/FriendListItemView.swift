@@ -62,8 +62,12 @@ struct FriendListItemView: View {
                     }
                     else {
                         Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 50)
                             .font(.largeTitle)
                             .foregroundColor(.gray)
+                            .clipShape(Circle())
+                        
                     }
             
                     Text("\(userItemSummary.nickName)")
