@@ -24,6 +24,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     private var saveSnapshotTimer: Timer? = nil
 //    private var snapshotsOfFollowings: [String: [Waypoint]] = [:]
     private var followingListeners: [String: ListenerRegistration] = [:]
+    private var isSharing: Bool = false
     
     init(locationRepository: LocationRepository, userService: UserService) {
         self.locationRepository = locationRepository
@@ -32,21 +33,24 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
         self.userService.updateFollowingLocationsDelegate = self
         self.locationRepository.locationRepositoryDelegate = self
         
-        if (CLLocationManager.locationServicesEnabled()){
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        }
+//        if (CLLocationManager.locationServicesEnabled()){
+//            self.locationManager.delegate = self
+//            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+//        }
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
         print("before checking permission")
         self.checkPermission()
         
-        if (CLLocationManager.locationServicesEnabled() && (self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
-            self.locationManager.startUpdatingLocation()
-            
-//            self.takeSnapshotTimer = self.startTakingLocationSnapshots(interval: 5)
-//            self.startSavingSnapshots(interval: 10)
-        }else{
-            self.requestPermission()
-        }
+//        if (CLLocationManager.locationServicesEnabled() && (self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
+//            self.locationManager.startUpdatingLocation()
+//            
+////            self.takeSnapshotTimer = self.startTakingLocationSnapshots(interval: 5)
+////            self.startSavingSnapshots(interval: 10)
+//        }else{
+//            self.requestPermission()
+//        }
     }
     
     deinit{
@@ -68,6 +72,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
             self.followingListeners[userId]?.remove()
             self.followingListeners.removeValue(forKey: userId)
             
+            locationServiceDelegate?.onFollowingRemoved(userId: userId)
 //            self.snapshotsOfFollowings.removeValue(forKey: userId)
         }
         
@@ -93,10 +98,14 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     }
     
     func requestPermission(){
-        if (CLLocationManager.locationServicesEnabled()){
-            print("before request when in use auth")
-            self.locationManager.requestWhenInUseAuthorization()
-        }
+//        if (CLLocationManager.locationServicesEnabled()){
+//            print("before request when in use auth")
+////            self.locationManager.requestWhenInUseAuthorization()
+//            self.locationManager.requestAlwaysAuthorization()
+//        }
+        print("before request when in use auth")
+//        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.requestAlwaysAuthorization()
     }
     
     
@@ -113,10 +122,11 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
             self.requestPermission()
             
         case .authorizedAlways:
-            self.locationManager.startUpdatingLocation()
-            
+//            self.locationManager.startUpdatingLocation()
+            print("case is authorized always")
         case .authorizedWhenInUse:
-            self.locationManager.startUpdatingLocation()
+//            self.locationManager.startUpdatingLocation()
+            print("case is authorized when in user")
             
         default:
             break
@@ -131,9 +141,12 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("adding \(locations.count) locations to uncommittedsnapshots")
         let waypoints: [Waypoint] = locations.map { Waypoint(location: $0)}
-        self.uncommittedSnapshots.append(contentsOf: waypoints)
+        
+        if isSharing {
+            print("adding \(locations.count) locations to uncommittedsnapshots")
+            self.uncommittedSnapshots.append(contentsOf: waypoints)
+        }
 //        locationServiceDelegate?.onSelfLocationUpdated(locations: locations)
         locationServiceDelegate?.onSelfLocationUpdated(waypoints: waypoints)
     }
@@ -212,6 +225,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     // commit the latest snapshots to the database
     func startSavingSnapshots(userId: String, interval: Double) {
         var testingCounter = 0
+        self.isSharing = true
         let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
             testingCounter += 1
             Task {
@@ -238,7 +252,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
 //        return timer
     }
     
-    // take only the first location with each time interval
+    // take only the first location within each time interval
     func sampleLocationInInterval(waypoints: [Waypoint], interval: Double) -> [Waypoint] {
         guard !waypoints.isEmpty else {
             print("empty waypoints")
@@ -265,11 +279,23 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
         }
     }
     
-    func startLocationUpdates() {
+    func stopSavingSnapshots() {
+        self.isSharing = false
+        self.uncommittedSnapshots = []
+        self.saveSnapshotTimer?.invalidate()
+        self.saveSnapshotTimer = nil
+    }
+    
+    func startLocationUpdates() throws {
         print("before checking permission")
         self.checkPermission()
         
-        if (CLLocationManager.locationServicesEnabled() && (self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
+        guard CLLocationManager.locationServicesEnabled() else {
+            print("location services disabled")
+            throw LocationServiceError.locationServicesDisabled
+        }
+        
+        if ((self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
             self.locationManager.startUpdatingLocation()
             
 //            self.takeSnapshotTimer = self.startTakingLocationSnapshots(interval: 5)
@@ -302,5 +328,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
         self.uncommittedSnapshots = []
         self.stopLocationUpdates()
         self.stopListeningToFollowingLocations()
+        locationServiceDelegate?.onLocationServiceReset()
     }
 }

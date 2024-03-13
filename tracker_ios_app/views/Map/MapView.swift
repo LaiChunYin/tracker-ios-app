@@ -17,11 +17,14 @@ struct MapView: View {
     @State var isRecenterMap: Bool = false
     @State var position: MapCameraPosition = .automatic
 //    @State var location: CLLocation?
-    @State var share: Bool = false
-    @State private var shareColor: Color = .red
+    @State var isFlashActive: Bool = false
+    @State private var isSharing: Bool = false
     @State private var tappedLocation: Waypoint? = nil
     @State private var showLocationDetail = false
     private var dateFormatter: DateFormatter
+    @State private var showMapAnnotation = false
+    @State private var showAlert = false
+    @State private var locationError: LocationServiceError? = nil
     
     init() {
         dateFormatter = DateFormatter()
@@ -34,35 +37,37 @@ struct MapView: View {
     var body: some View {
         GeometryReader{ geo in
             Map(position: $position){
-                // Path of the current user
-                MapPolyline(coordinates: locationViewModel.locationSnapshots.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-                     .stroke(.blue, lineWidth: 2.0)
                 
-                
-                // Paths of the following users
-                ForEach(Array(locationViewModel.snapshotsOfFollowings), id: \.key) { userId, waypoints in
-                    MapPolyline(coordinates: waypoints.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
-                         .stroke(.green, lineWidth: 2.0)
+                if showMapAnnotation {
+                    // Path of the current user
+                    MapPolyline(coordinates: locationViewModel.locationSnapshots.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
+                        .stroke(.blue, lineWidth: 2.0)
                     
-                    if let lastestLocation = waypoints.last, let nickName = userViewModel.currentUser?.userData?.following[userId]?.nickName {
-                        Annotation("\(nickName) at \(dateFormatter.string(from: lastestLocation.time))", coordinate: CLLocationCoordinate2D(latitude: waypoints.last!.latitude, longitude: waypoints.last!.longitude)) {
-                            Image(systemName: "mappin")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 40)
-                                .shadow(color: .white, radius: 3)
-                                .scaleEffect(x: -1)
-                                .onTapGesture {
-                                    print("tapped following")
-                                    tappedLocation = waypoints.last!
-                                    print("tappedlocation is now \(tappedLocation)")
-                                    showLocationDetail.toggle()
-                                }
+                    
+                    // Paths of the following users
+                    ForEach(Array(locationViewModel.snapshotsOfFollowings), id: \.key) { userId, waypoints in
+                        MapPolyline(coordinates: waypoints.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
+                            .stroke(.green, lineWidth: 2.0)
+                        
+                        if let lastestLocation = waypoints.last, let nickName = userViewModel.currentUser?.userData?.following[userId]?.nickName {
+                            Annotation("\(nickName) at \(dateFormatter.string(from: lastestLocation.time))", coordinate: CLLocationCoordinate2D(latitude: waypoints.last!.latitude, longitude: waypoints.last!.longitude)) {
+                                Image(systemName: "mappin")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 40)
+                                    .shadow(color: .white, radius: 3)
+                                    .scaleEffect(x: -1)
+                                    .onTapGesture {
+                                        print("tapped following")
+                                        tappedLocation = waypoints.last!
+                                        print("tappedlocation is now \(tappedLocation)")
+                                        showLocationDetail.toggle()
+                                    }
+                            }
                         }
                     }
-                }
-                
-                Annotation("You're here", coordinate: CLLocationCoordinate2D(latitude: locationViewModel.currentLocation?.latitude ?? 0, longitude: locationViewModel.currentLocation?.longitude ?? 0)) {
+                    
+                    Annotation("You're here", coordinate: CLLocationCoordinate2D(latitude: locationViewModel.currentLocation?.latitude ?? 0, longitude: locationViewModel.currentLocation?.longitude ?? 0)) {
                         Image(systemName: "mappin")
                             .resizable()
                             .scaledToFit()
@@ -75,6 +80,7 @@ struct MapView: View {
                                 print("tappedlocation is now \(tappedLocation)")
                                 showLocationDetail.toggle()
                             }
+                    }
                 }
                 
             }
@@ -83,22 +89,41 @@ struct MapView: View {
             .overlay(alignment: .bottomTrailing){
                 VStack {
                     Button{
+//                        Task{
+//                            share.toggle()
+//                            if(shareColor == .red){
+//                                print("Location sharing is on") // MARK: START SHARING LOCATION WITH OTHERS
+//                            }else{
+//                                print("Location sharing is off") // // MARK: STOP SHARING LOCATION WITH OTHERS
+//                            }
+//                            shareColor = (shareColor == .green) ? .red : .green
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+//                                share.toggle()
+//                            }
+//                        }
+                        
                         Task{
-                            share.toggle()
-                            if(shareColor == .red){
-                                print("Location sharing is on") // MARK: START SHARING LOCATION WITH OTHERS
-                            }else{
-                                print("Location sharing is off") // // MARK: STOP SHARING LOCATION WITH OTHERS
+                            // toggle twice to make a flashing effect
+                            isFlashActive.toggle()
+                            isSharing.toggle()
+                            if isSharing {
+                                print("Location sharing is on")
+                                locationViewModel.startSavingSnapshots(userId: userViewModel.currentUser!.identifier)
                             }
-                            shareColor = (shareColor == .green) ? .red : .green
+                            else {
+                                print("Location sharing is off")
+                                locationViewModel.stopSavingSnapshots()
+                            }
+                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                share.toggle()
+                                isFlashActive.toggle()
                             }
                         }
-                    }label: {
+                        
+                    } label: {
                         Image(systemName: "wifi")
                             .font(.largeTitle)
-                            .foregroundColor(.green)
+                            .foregroundColor(isSharing ? .green : .red)
                             .imageScale(.small)
                             .padding(10)
                             .background(.ultraThinMaterial)
@@ -109,7 +134,8 @@ struct MapView: View {
                     }
                     .popoverTip(MapTip(), arrowEdge: .top)
 
-                    BottomLeftButtonView(isRecenterMap: $isRecenterMap, isSatelliteMap: $isSatelliteMap, position: $position, share: $share, shareColor: $shareColor)
+//                    BottomLeftButtonView(isRecenterMap: $isRecenterMap, isSatelliteMap: $isSatelliteMap, position: $position, share: $share, shareColor: $shareColor)
+                    RecenterButtonView(isRecenterMap: $isRecenterMap, position: $position)
                     
                     Button{
                         isSatelliteMap.toggle()
@@ -136,40 +162,91 @@ struct MapView: View {
 
             
             ZStack{
+                // for the flashing screen effect when turning the sharing on/off
                 ZStack {
                     Rectangle()
                         .frame(width: geo.size.width, height: geo.size.height)
-                        .foregroundColor(share ? shareColor.opacity(0.6) : .clear)
-                        .animation(.easeInOut, value: share)
-                    if share {
+                        .foregroundColor(isFlashActive ? ((isSharing ? .green : .red) as Color).opacity(0.6) : .clear)
+                        .animation(.easeInOut, value: isFlashActive)
+                    if isFlashActive {
                        GridPattern()
                    }
                }
                 .frame(width: geo.size.width, height: geo.size.height)
             }
-            .onAppear{
-                print("start location update")
-                print("snapshot of following \(locationViewModel.snapshotsOfFollowings)")
-                locationViewModel.startLocationUpdates()
-                locationViewModel.startSavingSnapshots(userId: userViewModel.currentUser!.identifier)
-            }
+//            .onAppear{
+//                print("start location update")
+//                print("snapshot of following \(locationViewModel.snapshotsOfFollowings)")
+//                
+//                do {
+//                    try locationViewModel.startLocationUpdates()
+//                    
+//                    if isSharing {
+//                        print("share location by default")
+//                        locationViewModel.startSavingSnapshots(userId: userViewModel.currentUser!.identifier)
+//                    }
+//                }
+//                catch let error as LocationServiceError {
+//                    print("cannot start location updates: \(error)")
+//                    
+//                    showAlert.toggle()
+//                    locationError = error
+//                }
+//                catch let error {
+//                    print("unknown location error: \(error)")
+//                }
+//            }
         }
             .edgesIgnoringSafeArea(.all)
+            .alert(isPresented: $showAlert) {
+                var msg: String
+                switch locationError {
+                    case .locationServicesDisabled:
+                        msg = "Location Service is disabled"
+                    default:
+                        msg = "Cannot start location update. Unknown error."
+                }
+                return Alert(title: Text("Error"), message: Text(msg))
+            }
+            .onAppear() {
+                print("start location update")
+                print("snapshot of following \(locationViewModel.snapshotsOfFollowings)")
+                
+                do {
+                    try locationViewModel.startLocationUpdates()
+                    
+                    if isSharing {
+                        print("share location by default")
+                        locationViewModel.startSavingSnapshots(userId: userViewModel.currentUser!.identifier)
+                    }
+                }
+                catch let error as LocationServiceError {
+                    print("cannot start location updates: \(error)")
+                    
+                    showAlert.toggle()
+                    locationError = error
+                }
+                catch let error {
+                    print("unknown location error: \(error)")
+                }
+                
+                // delay the map annotations. If showing the annotations immediately after clicking the login button, the application will not be able to make connection with FireAuth for unknown reason
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    print("delaying map annotations")
+                    withAnimation {
+                        showMapAnnotation = true
+                    }
+                }
+            }
     }
 }
 
 
-struct BottomLeftButtonView: View {
+struct RecenterButtonView: View {
     @Binding var isRecenterMap: Bool
-    @Binding var isSatelliteMap: Bool
     @Binding var position: MapCameraPosition
-    @Binding var share: Bool
-    @Binding var shareColor: Color
     
     var body: some View {
-        
-        
-        
         Button{
             isRecenterMap = true
             withAnimation{

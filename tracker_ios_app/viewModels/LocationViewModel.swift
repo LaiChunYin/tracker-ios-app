@@ -30,7 +30,19 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         print("after loc view model init")
     }
     
-//    func onSelfLocationUpdated(locations: [CLLocation]) {
+    func onLocationServiceReset() {
+        print("resetting location view model")
+        self.currentLocation = nil
+        self.locationSnapshots = []
+        self.snapshotsOfFollowings = [:]
+        self.currentWeather = nil
+    }
+    
+    func onFollowingRemoved(userId: String) {
+        print("removing following \(userId) in location view model")
+        self.snapshotsOfFollowings.removeValue(forKey: userId)
+    }
+    
     func onSelfLocationUpdated(waypoints: [Waypoint]) {
         print("before self location updated")
         
@@ -64,16 +76,27 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         self.snapshotsOfFollowings[userId] = []
     }
     
-    func startLocationUpdates() {
-        print("before start location update")
-        locationService.startLocationUpdates()
-        print("after start location update")
+    func startLocationUpdates() throws {
+        do {
+            print("before start location update")
+            try locationService.startLocationUpdates()
+            print("after start location update")
+        }
+        catch let error {
+            print("error in start location updates: \(error)")
+            throw error
+        }
+        
     }
     
     func startSavingSnapshots(userId: String) {
         print("before start saving snapshots")
         locationService.startSavingSnapshots(userId: userId, interval: 10)
         print("after start saving snapshots")
+    }
+    
+    func stopSavingSnapshots() {
+        locationService.stopSavingSnapshots()
     }
     
     func getLocationDetails(latitude: Double, longitude: Double) async {

@@ -42,7 +42,7 @@ struct SignUpView: View {
                         
                         Spacer()
                         
-                        Text("User Name")
+                        Text("Email")
                             .font(.title)
                             .fontWeight(.semibold)
                             .foregroundColor(.white)
@@ -77,6 +77,7 @@ struct SignUpView: View {
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
                             .padding(.horizontal)
                             .padding(.bottom, 10)
+                            .textContentType(.newPassword)
                         
                         Text("Confirm Password")
                             .font(.title)
@@ -88,6 +89,7 @@ struct SignUpView: View {
                             .foregroundColor(.orange)
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.orange, lineWidth: 3))
                             .padding(.horizontal)
+                            .textContentType(.newPassword)
                         
                         Spacer()
                         

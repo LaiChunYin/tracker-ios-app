@@ -23,7 +23,6 @@
 		FA45FF322B87166700A126A6 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FF312B87166700A126A6 /* AddFriendView.swift */; };
 		FA45FF342B87C71D00A126A6 /* FriendListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FF332B87C71D00A126A6 /* FriendListItemView.swift */; };
 		FA45FF362B87C72F00A126A6 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA45FF352B87C72F00A126A6 /* AuthenticationService.swift */; };
-		FA45FF8C2B8A505500A126A6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA45FF8B2B8A505500A126A6 /* GoogleService-Info.plist */; };
 		FA45FF8F2B8A50F500A126A6 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FA45FF8E2B8A50F500A126A6 /* FirebaseAuth */; };
 		FA45FF912B8A50F500A126A6 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FA45FF902B8A50F500A126A6 /* FirebaseFirestore */; };
 		FA45FF932B8A50F500A126A6 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FA45FF922B8A50F500A126A6 /* FirebaseFirestoreSwift */; };
@@ -51,6 +50,7 @@
 		FA8673FC2B9A6A81005E5888 /* LocationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8673FB2B9A6A81005E5888 /* LocationRepository.swift */; };
 		FA86747A2B9D513E005E5888 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8674792B9D513E005E5888 /* Weather.swift */; };
 		FAC6330B2B9E4E030071CC8B /* LocationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC6330A2B9E4E030071CC8B /* LocationDetailsView.swift */; };
+		FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,7 +91,6 @@
 		FA45FF312B87166700A126A6 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		FA45FF332B87C71D00A126A6 /* FriendListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListItemView.swift; sourceTree = "<group>"; };
 		FA45FF352B87C72F00A126A6 /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
-		FA45FF8B2B8A505500A126A6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA45FF942B8A539400A126A6 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		FA45FF972B8A9EC300A126A6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FA45FF992B8AA62500A126A6 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
@@ -116,6 +115,7 @@
 		FA8673FB2B9A6A81005E5888 /* LocationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRepository.swift; sourceTree = "<group>"; };
 		FA8674792B9D513E005E5888 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		FAC6330A2B9E4E030071CC8B /* LocationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsView.swift; sourceTree = "<group>"; };
+		FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,7 +150,7 @@
 		FA45FEEA2B870E4100A126A6 = {
 			isa = PBXGroup;
 			children = (
-				FA45FF8B2B8A505500A126A6 /* GoogleService-Info.plist */,
+				FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */,
 				FA45FEF52B870E4100A126A6 /* tracker_ios_app */,
 				FA45FF062B870E4200A126A6 /* tracker_ios_appTests */,
 				FA45FF102B870E4200A126A6 /* tracker_ios_appUITests */,
@@ -432,7 +432,7 @@
 			files = (
 				FA45FEFE2B870E4200A126A6 /* Preview Assets.xcassets in Resources */,
 				FA45FEFB2B870E4200A126A6 /* Assets.xcassets in Resources */,
-				FA45FF8C2B8A505500A126A6 /* GoogleService-Info.plist in Resources */,
+				FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -661,7 +661,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to tracks your location";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To track your location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "The Application needs to track your location, including when the app is off";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to track your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -693,7 +695,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to tracks your location";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To track your location";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "The Application needs to track your location, including when the app is off";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to track your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

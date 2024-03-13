@@ -40,8 +40,8 @@ struct LocationDetailsView: View {
                 
                 Text("region: \(weather.region)")
                 Text("country: \(weather.country)")
-                Text("temp: \(weather.temp)")
-                Text("humidity: \(weather.humidity)")
+                Text("temp: \(String(format: "%.2f", weather.temp)) °C")
+                Text("humidity: \(String(format: "%.2f", weather.humidity)) %")
                 Text("last Updated: \(weather.lastUpdate)")
             }
             else {

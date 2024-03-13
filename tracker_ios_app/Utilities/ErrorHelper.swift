@@ -57,6 +57,12 @@ enum UpdateProfileError: Error, Identifiable {
     case unknown
 }
 
+enum LocationServiceError: Error, Identifiable {
+    var id: Self {self}
+    
+    case locationServicesDisabled
+}
+
 func translateFirebaseAuthError(error: Error) -> Error? {
     print("translating error \(error), \(error._code), here \(AuthErrorCode.Code(rawValue: error._code))")
     guard let errorCode = AuthErrorCode.Code(rawValue: error._code) else {

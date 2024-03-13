@@ -51,6 +51,8 @@ protocol LocationServiceDelegate: AnyObject {
 //    func onSelfLocationUpdated(currentLocation: CLLocation)
     func onSelfLocationUpdated(waypoints: [Waypoint])
 //    func onLocationRemoved(userId: String, waypoint: Waypoint)
+    func onLocationServiceReset()
+    func onFollowingRemoved(userId: String)
 }
 
 protocol UpdateFollowingLocationsDelegate: AnyObject {
