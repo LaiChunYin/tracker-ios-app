@@ -85,18 +85,5 @@ struct tracker_ios_app: App {
             ContentView().environmentObject(userViewModel).environmentObject(notificationViewModel)
                 .environmentObject(locationViewModel)
         }
-//        .onChange(of: scenePhase) { currentPhase in
-//            switch scenePhase {
-//                case .active:
-//                    print("active app")
-//                default:
-//                    print("not active app")
-//                    guard preferenceService.isRememberLoginStatus else {
-//                        print("require to login again")
-//                        userViewModel.logout()
-//                        return
-//                    }
-//            }
-//        }
     }
 }

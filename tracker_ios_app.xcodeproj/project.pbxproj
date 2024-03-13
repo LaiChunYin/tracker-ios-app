@@ -51,6 +51,7 @@
 		FA86747A2B9D513E005E5888 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8674792B9D513E005E5888 /* Weather.swift */; };
 		FAC6330B2B9E4E030071CC8B /* LocationDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC6330A2B9E4E030071CC8B /* LocationDetailsView.swift */; };
 		FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */; };
+		FAC633B02BA20B610071CC8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +117,8 @@
 		FA8674792B9D513E005E5888 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		FAC6330A2B9E4E030071CC8B /* LocationDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationDetailsView.swift; sourceTree = "<group>"; };
 		FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		FAC633AE2BA209970071CC8B /* tracker-ios-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "tracker-ios-app-Info.plist"; sourceTree = SOURCE_ROOT; };
+		FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -171,6 +174,7 @@
 		FA45FEF52B870E4100A126A6 /* tracker_ios_app */ = {
 			isa = PBXGroup;
 			children = (
+				FAC633AE2BA209970071CC8B /* tracker-ios-app-Info.plist */,
 				FA45FEF62B870E4100A126A6 /* tracker_ios_app.swift */,
 				FA45FF242B870EB800A126A6 /* repositories */,
 				FA45FF222B870E6700A126A6 /* services */,
@@ -248,6 +252,7 @@
 				FA45FEF82B870E4100A126A6 /* ContentView.swift */,
 				FA45FF292B870F9E00A126A6 /* MainView.swift */,
 				FA8673EB2B92EC1F005E5888 /* SettingsView.swift */,
+				FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */,
 				FAD8E5802B8ED78100F980F8 /* Map */,
 				FAD8E57F2B8ED6FF00F980F8 /* Follow */,
 				FA45FFAA2B8BD3C800A126A6 /* Authentication */,
@@ -431,6 +436,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA45FEFE2B870E4200A126A6 /* Preview Assets.xcassets in Resources */,
+				FAC633B02BA20B610071CC8B /* LaunchScreen.storyboard in Resources */,
 				FA45FEFB2B870E4200A126A6 /* Assets.xcassets in Resources */,
 				FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */,
 			);
@@ -659,6 +665,7 @@
 				DEVELOPMENT_TEAM = 6Q6TT7NJ4R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "tracker-ios-app-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To track your location";
@@ -666,7 +673,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to track your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -693,6 +700,7 @@
 				DEVELOPMENT_TEAM = 6Q6TT7NJ4R;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "tracker-ios-app-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "";
 				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "To track your location";
@@ -700,7 +708,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The Application needs to track your location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -110,15 +110,6 @@ struct ContentView: View {
                 LoginView()
             }
         }
-        .onAppear() {
-//            locationViewModel.startLocationUpdate()
-            
-//            Task {
-//                DispatchQueue.main.async {
-//                    locationViewModel.startLocationUpdate()
-//                }
-//            }
-        }
 
     }
 }
