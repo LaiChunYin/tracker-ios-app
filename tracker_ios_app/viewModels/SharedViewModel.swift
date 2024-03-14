@@ -9,5 +9,5 @@ import Foundation
 
 
 class SharedViewModel: ObservableObject {
-    @Published var tabSelection: Int = 0
+    @Published var tabSelection: MainViewTabs = .map
 }

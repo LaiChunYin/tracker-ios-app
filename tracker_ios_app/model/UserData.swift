@@ -6,13 +6,10 @@
 //
 
 import Foundation
-import FirebaseFirestoreSwift
 import FirebaseAuth
-import CoreLocation
 
 
 struct UserData: Codable {
-//    @DocumentID var id: String?
     var isConnected: Bool = false
     var nickName: String = ""
     var profilePic: String = ""

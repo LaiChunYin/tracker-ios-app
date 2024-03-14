@@ -26,6 +26,12 @@ enum RootViews {
     case notifications
 }
 
+enum MainViewTabs {
+    case map
+    case following
+    case followedBy
+}
+
 struct UserDefaultsKeys {
     static let REMEMBER_ME = "REMEMBER_ME"
     static let GEOFENCE_RADIUS = "GEOFENCE_RADIUS"

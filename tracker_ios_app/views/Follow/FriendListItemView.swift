@@ -79,7 +79,7 @@ struct FriendListItemView: View {
                       .foregroundColor(.green)
                       .onTapGesture {
                           print("go to user")
-                          sharedViewModel.tabSelection = 0  // go to map
+                          sharedViewModel.tabSelection = .map  // go to map
                           locationViewModel.focusAt(location: locationViewModel.snapshotsOfFollowings[userId]!.last)
                       }
                 }

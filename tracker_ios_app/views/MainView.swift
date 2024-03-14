@@ -23,21 +23,21 @@ struct MainView: View {
                     Image(systemName: "map")
                     Text("Map") //Map
                 }
-                .tag(0)
+                .tag(MainViewTabs.map)
                 
                 FollowingListView().environmentObject(userViewModel)
                 .tabItem {
                     Image(systemName: "person")
                     Text("Following") //Following
                 }
-                .tag(1)
+                .tag(MainViewTabs.following)
                 
                 FollowedByListView().environmentObject(userViewModel).environmentObject(notificationViewModel)
                 .tabItem {
                     Image(systemName: "eye")
                     Text("Followed By") //Followed By
                 }
-                .tag(2)
+                .tag(MainViewTabs.followedBy)
                 
             }
             .navigationTitle(userViewModel.currentUser?.userData != nil ? "Welcome, \(userViewModel.currentUser!.userData!.nickName)" : "Logging out")

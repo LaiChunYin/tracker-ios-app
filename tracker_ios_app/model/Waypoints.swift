@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct Waypoint: Codable, Equatable {
     let longitude: Double
