@@ -12,6 +12,7 @@ import Contacts
 
 class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDelegate, UpdateFollowingLocationsDelegate {
     private let userService: UserService
+    private let preferenceService: PreferenceService
     private var locationRepository: LocationRepository
     weak var locationServiceDelegate: LocationServiceDelegate?
     private let geoCoder = CLGeocoder()
@@ -20,11 +21,15 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     private var uncommittedSnapshots: [Waypoint] = []
     private var saveSnapshotTimer: Timer? = nil
     private var followingListeners: [String: ListenerRegistration] = [:]
-    private var isSharing: Bool = false
+    var isSharing: Bool = false
+    var locationUploadTimeInterval: Int {
+        preferenceService.locationUploadTimeInterval
+    }
     
-    init(locationRepository: LocationRepository, userService: UserService) {
+    init(locationRepository: LocationRepository, userService: UserService, preferenceService: PreferenceService) {
         self.locationRepository = locationRepository
         self.userService = userService
+        self.preferenceService = preferenceService
         super.init()
         self.userService.updateFollowingLocationsDelegate = self
         self.locationRepository.locationRepositoryDelegate = self
@@ -211,7 +216,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
                     
                     // save only some of the uncommittedSnapshots to reduce the number of database operations
                     print("before sampling \(self.uncommittedSnapshots.count) \(self.uncommittedSnapshots)")
-                    self.uncommittedSnapshots = self.sampleLocationInInterval(waypoints: self.uncommittedSnapshots, interval: 10)
+                    self.uncommittedSnapshots = self.sampleLocationInInterval(waypoints: self.uncommittedSnapshots, interval: self.locationUploadTimeInterval)
                     print("after sampling \(self.uncommittedSnapshots.count), \(self.uncommittedSnapshots)")
                     try await self.addWaypoints(userId: userId, waypoints: self.uncommittedSnapshots)
                     
@@ -227,7 +232,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     }
     
     // take only the first location within each time interval
-    func sampleLocationInInterval(waypoints: [Waypoint], interval: Double) -> [Waypoint] {
+    func sampleLocationInInterval(waypoints: [Waypoint], interval: Int) -> [Waypoint] {
         guard !waypoints.isEmpty else {
             print("empty waypoints")
             return []
@@ -240,7 +245,7 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
                 return true
             }
             
-            let timeDiff = Double(Int($0.time.timeIntervalSince(currentTime!)) % 60)
+            let timeDiff = (Int($0.time.timeIntervalSince(currentTime!)) % 60)
             print("time diff is \(timeDiff)")
             
             if timeDiff >= interval {

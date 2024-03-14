@@ -70,7 +70,7 @@ struct tracker_ios_app: App {
         self.notificationService = NotificationService(notificationRepository: notificationRepository)
         self.authenticationService = AuthenticationService(preferenceService: preferenceService, notificationService: notificationService, userRepository: userRepository, notificationRepository: notificationRepository)
         self.userService = UserService(userRepository: userRepository, authenticationService: authenticationService, notificationService: notificationService)
-        self.locationService = LocationService(locationRepository: locationRepository, userService: userService)
+        self.locationService = LocationService(locationRepository: locationRepository, userService: userService, preferenceService: preferenceService)
         self.weatherService = WeatherService()
         
         self.sharedViewModel = SharedViewModel()

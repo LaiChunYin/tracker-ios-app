@@ -24,6 +24,9 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     var geofenceRadius: Double {
         preferenceService.geofenceRadiusInMeters
     }
+    var locationUploadTimeInterval: Int {
+        preferenceService.locationUploadTimeInterval
+    }
     @Published var currentUserGeofence: (String, CLLocationCoordinate2D, CLLocationDistance)? = nil  // (current user id, current user's location, radius of geofence zone)
     private var previousGeofenceOfUsers: [String: (String, CLLocationCoordinate2D, CLLocationDistance)] = [:] // this is for detecting user enter/exit events
     
@@ -147,7 +150,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     
     func startSavingSnapshots(userId: String) {
         print("before start saving snapshots")
-        locationService.startSavingSnapshots(userId: userId, interval: 10)
+        locationService.startSavingSnapshots(userId: userId, interval: Double(self.locationUploadTimeInterval))
         print("after start saving snapshots")
     }
     
@@ -197,7 +200,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
                 }
                 
                 if let waypoints = self.snapshotsOfFollowings[userId], let lastWaypoint = waypoints.last {
-                    let secondLastWaypoint: Waypoint? = waypoints[waypoints.count - 2]
+                    let secondLastWaypoint: Waypoint? = waypoints.count >= 2 ? waypoints[waypoints.count - 2] : nil
                     if Double(Int(lastWaypoint.time.timeIntervalSinceNow) % 60) >= 20 {
                         print("location not updated enough")
                     }
@@ -233,5 +236,15 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
 
     func updateMaxTimeDiffBetween2Points(timeDiff: Double) {
         preferenceService.maxTimeDiffBetween2Points = timeDiff
+    }
+
+    func updateLocationUploadTimeInterval(userId: String, interval: Int) {
+        preferenceService.locationUploadTimeInterval = interval
+        
+        if locationService.isSharing {
+            print("resetting snapshot timer")
+            locationService.stopSavingSnapshots()
+            locationService.startSavingSnapshots(userId: userId, interval: Double(interval))
+        }
     }
 }

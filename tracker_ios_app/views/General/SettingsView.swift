@@ -19,7 +19,7 @@ struct SettingsView: View {
     @State private var trackingFrequency: Double = 5
     @State private var geofenceRadius: Double = 100
     @State private var maxTimeDiffBetween2Points: Double = 60
-    private var frequencyOptions = [1/30, 2, 5, 10]
+    @State private var locationUploadTimeInterval: Int = 10
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
@@ -134,12 +134,23 @@ struct SettingsView: View {
                     }
                 }
                 
-//                Picker("Location Update Frequency", selection: $trackingFrequency) {
-//                    ForEach(frequencyOptions, id: \.self) { freq in
-//                        Text("\(freq) min").tag(freq)
-//                    }
-//                }
-//                .pickerStyle(SegmentedPickerStyle())
+                VStack {
+                    
+                    Text("Upload location every \(locationUploadTimeInterval) seconds")
+                    
+                    Slider(value: Binding(
+                        get: { Double(locationUploadTimeInterval) },
+                        set: { locationUploadTimeInterval = Int($0) })
+                        , in: 1...1800, step: 1) {
+                    } minimumValueLabel: {
+                        Text("1")
+                    } maximumValueLabel: {
+                        Text("1800")
+                    }.onChange(of: locationUploadTimeInterval) {
+                        print("updating locationUploadTimeInterval to \(locationUploadTimeInterval)")
+                    }
+                }
+                
                 
                 Button {
                     Task {
@@ -147,6 +158,7 @@ struct SettingsView: View {
                             print("saving geofence radius \(geofenceRadius)")
                             locationViewModel.updateGeofenceRadius(radius: geofenceRadius)
                             locationViewModel.updateMaxTimeDiffBetween2Points(timeDiff: maxTimeDiffBetween2Points)
+                            locationViewModel.updateLocationUploadTimeInterval(userId: userViewModel.currentUser!.identifier, interval: locationUploadTimeInterval)
                             
                             // compress the image to low quality, a firestore document cannot exceed 1 Mb
                             let imgData = avatarImage != nil ? resizeImage(image: avatarImage!, targetSize: CGSize(width: 500, height: 500) ).jpegData(compressionQuality: 0) : nil
@@ -210,6 +222,7 @@ struct SettingsView: View {
                 
                 self.geofenceRadius = locationViewModel.geofenceRadius
                 self.maxTimeDiffBetween2Points = locationViewModel.maxTimeDiffBetween2Points
+                self.locationUploadTimeInterval = locationViewModel.locationUploadTimeInterval
             }
         }
     }

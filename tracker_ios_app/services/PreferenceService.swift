@@ -44,4 +44,16 @@ class PreferenceService {
             UserDefaults.standard.set(value, forKey: UserDefaultsKeys.MAX_TIME_DIFF_BTW_2_PTS)
         }
     }
+    
+    var locationUploadTimeInterval: Int {
+        get {
+            let value = UserDefaults.standard.integer(forKey: UserDefaultsKeys.LOCATION_UPLOAD_TIME_INTERVAL)
+            
+            return value > 0 ? value : 10
+        }
+        
+        set(value) {
+            UserDefaults.standard.set(value, forKey: UserDefaultsKeys.LOCATION_UPLOAD_TIME_INTERVAL)
+        }
+    }
 }
