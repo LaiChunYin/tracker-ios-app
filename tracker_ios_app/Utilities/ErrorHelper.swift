@@ -70,12 +70,6 @@ func translateFirebaseAuthError(error: Error) -> Error? {
         return AppError.unknown
     }
     
-//    let nsError = error as NSError
-//    guard let errorCode = AuthErrorCode(rawValue: nsError.code) else {
-//        print("Unknown error code")
-//        return AppError.unknown
-//    }
-    
     print("error code is \(errorCode), \(AuthErrorCode.Code.wrongPassword)")
     switch errorCode {
         case AuthErrorCode.Code.userNotFound:

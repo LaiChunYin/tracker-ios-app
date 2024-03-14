@@ -18,7 +18,7 @@ struct AddFriendView: View {
     var body: some View {
         VStack {
                 VStack(alignment: .leading) {
-                    Text("User Email/Phone: ")
+                    Text("User Email: ")
                     .padding(.top)
                     
                     ZStack{

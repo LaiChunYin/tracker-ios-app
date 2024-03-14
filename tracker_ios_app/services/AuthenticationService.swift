@@ -103,11 +103,7 @@ class AuthenticationService {
 
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
-//                if let error = error as? NSError {
-//                    print("sign in error is \(error)")
-//                    continuation.resume(throwing: error)
-//                    return
-//                }
+
                 if let error = error, let customError = translateFirebaseAuthError(error: error) {
                     print("sign in error is \(customError)")
                     continuation.resume(throwing: customError)
@@ -122,10 +118,7 @@ class AuthenticationService {
                         print(#function, "Login Successful")
                         
                         if let userAccount = authResult?.user {
-//                            self!.currentUser = AppUser(accountData: userAccount)
-                            
                             self!.initializeData(user: AppUser(accountData: userAccount))
-
                         }
                         continuation.resume(returning: ())
                 }

@@ -78,14 +78,6 @@ class UserRepository {
             let docRef = self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId)
             batch.updateData(newData, forDocument: docRef)
         }
-
-//        batch.commit { err in
-//            if let err = err {
-//                print("Error writing batch \(err)")
-//            } else {
-//                print("Batch write succeeded.")
-//            }
-//        }
         
         try await batch.commit()
         

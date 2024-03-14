@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-//    @StateObject var userViewModel = UserViewModel()
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var notificationViewModel: NotificationViewModel
     @EnvironmentObject var locationViewModel: LocationViewModel

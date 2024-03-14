@@ -95,7 +95,6 @@ struct NotificationDetailView: View {
         }
         .onAppear() {
             print("read")
-//            notificationViewModel.notificationRead(notificationId: notification.id!)
             if !notification.read {
                 notificationViewModel.notificationRead(userId: userViewModel.currentUser!.identifier, notificationId: notification.id!)
             }

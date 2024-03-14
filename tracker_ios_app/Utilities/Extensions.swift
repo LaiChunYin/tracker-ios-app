@@ -13,16 +13,3 @@ extension Encodable {
         return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }
 }
-
-//extension CastableError {
-//    func cast<T: CastableError, U: CastableError>(error: T) -> U {
-//        if let error = error as? AppError {
-//            print("can be casted to app error")
-//            return .unknown
-//        }
-//        else {
-//            return error
-//        }
-//    }
-//    
-//}

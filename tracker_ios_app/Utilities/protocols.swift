@@ -26,7 +26,6 @@ protocol UserDataValidationDelegate: AnyObject {
 }
 
 protocol NotificationServiceDelegate: AnyObject {
-//    func updateNotificationOnChange(notificationId: String, notification: Notification)
     func onNotificationAdded(notificationId: String, notification: Notification)
     func onNotificationUpdated(notificationId: String, notification: Notification)
     func onNotificationRemoved(notificationId: String, notification: Notification)
@@ -41,29 +40,18 @@ protocol NotificationRepositoryDelegate: AnyObject {
 }
 
 protocol LocationRepositoryDelegate: AnyObject {
-//    func onLocationChange(type: DataChangeType, wayPointId: String, wayPoint: Waypoint)
     func onLocationChange(type: DataChangeType, userId: String, wayPoint: Waypoint)
 }
 
 protocol LocationServiceDelegate: AnyObject {
     func onLocationInit(userId: String)
     func onLocationAdded(userId: String, waypoint: Waypoint)
-//    func onSelfLocationUpdated(currentLocation: CLLocation)
     func onSelfLocationUpdated(waypoints: [Waypoint])
-//    func onLocationRemoved(userId: String, waypoint: Waypoint)
     func onLocationServiceReset()
     func onFollowingRemoved(userId: String)
 }
 
 protocol UpdateFollowingLocationsDelegate: AnyObject {
-//    func onFollowerUpdated(userId: String)
     func onFollowerUpdated(userData: UserData)
 }
 
-//protocol CastableError {
-//    func cast(error: Error) -> LoginError
-//    func cast(error: Error) -> SignUpError
-//    func cast(error: Error) -> UserError
-//    
-//    func cast<T: CastableError, U: CastableError>(error: T) -> U
-//}

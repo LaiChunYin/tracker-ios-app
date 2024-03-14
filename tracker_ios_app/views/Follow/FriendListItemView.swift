@@ -21,7 +21,6 @@ struct FriendListItemView: View {
     @Binding private var showAlert: Bool
     @Binding private var sentResult: Result<Void, UserError>?
     
-//    init(userId: String, userItemSummaryDict: [String: Any], icon: String) {
     init(userId: String, userItemSummary: UserItemSummary, icon: String = "", showAlert: Binding<Bool>, sentResult: Binding<Result<Void, UserError>?>) {
 //        do {
             self.userId = userId
@@ -92,7 +91,6 @@ struct FriendListItemView: View {
                                 try await notificationViewModel.requestFollow(target: userId, by: userViewModel.currentUser!.identifier)
                                 sentResult = .success(())
                                 print("success")
-//                                sentResult = .failure(.unknown)
                                 showAlert.toggle()
                             }
                             catch let error as UserError {

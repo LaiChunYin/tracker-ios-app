@@ -9,7 +9,6 @@ import Foundation
 import CoreLocation
 
 class LocationViewModel: ObservableObject, LocationServiceDelegate {
-//    @Published var currentLocation: CLLocation
     @Published var currentLocation: Waypoint? = nil
     @Published var locationSnapshots: [Waypoint] = []
     @Published var snapshotsOfFollowings: [String: [Waypoint]] = [:]
@@ -24,15 +23,10 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         preferenceService.geofenceRadiusInMeters
     }
     @Published var currentUserGeofence: (String, CLLocationCoordinate2D, CLLocationDistance)? = nil  // (current user id, current user's location, radius of geofence zone)
-//    private var previousUserGeofence: (String, CLLocationCoordinate2D, CLLocationDistance)? = nil // this is for detecting user enter/exit events
     private var previousGeofenceOfUsers: [String: (String, CLLocationCoordinate2D, CLLocationDistance)] = [:] // this is for detecting user enter/exit events
     
     
-//    init(currentLocation: CLLocation, locationSnapshots: [Waypoint], snapshotsOfFollowings: [String : [Waypoint]], locationService: LocationService) {
     init(locationService: LocationService, weatherService: WeatherService, notificationService: NotificationService, preferenceService: PreferenceService) {
-//        self.currentLocation = currentLocation
-//        self.locationSnapshots = locationSnapshots
-//        self.snapshotsOfFollowings = snapshotsOfFollowings
         self.locationService = locationService
         self.weatherService = weatherService
         self.notificationService = notificationService
@@ -97,20 +91,14 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     func onSelfLocationUpdated(waypoints: [Waypoint]) {
         print("before self location updated")
         
-//        self.locationSnapshots.append(contentsOf: waypoints)
         print("before keeping self locations: \(self.locationSnapshots.count)")
         self.locationSnapshots = self.keepOnlyLatestLocations(originalWaypoints: self.locationSnapshots, newWaypoints: waypoints, timeRange: maxTimeDiffBetween2Points)
         print("after keeping self locations: \(self.locationSnapshots.count)")
         
         if waypoints.last != nil{
-            //most recent
-//            print(#function, "most recent location : \(waypoints.last!)")
-            
             self.currentLocation = waypoints.last!
-        }else{
-            //oldest known location
-//            print(#function, "last known location : \(waypoints.first)")
-            
+        }
+        else {
             self.currentLocation = waypoints.first!
         }
         
@@ -190,7 +178,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     }
     
     /*
-     Detect Enter/Exit by checking if the previous location was in the previous region and if the current location is in the current location
+     Detect Enter/Exit by checking if the previous location was in the previous region and if the current location is in the current location. The checking is done only when the following users update their location
      Limitations:
      1. if the current user or the following user moves too fast, the following user may be cutting through the region without being detected
      */
@@ -206,12 +194,10 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
                     previousRegion = CLCircularRegion(center: center, radius: radius, identifier: "previousUserGeofence")
                 }
                 
-//                for (userId, waypoints) in snapshotsOfFollowings {
                 if let waypoints = self.snapshotsOfFollowings[userId], let lastWaypoint = waypoints.last {
                     let secondLastWaypoint: Waypoint? = waypoints[waypoints.count - 2]
                     if Double(Int(lastWaypoint.time.timeIntervalSinceNow) % 60) >= 20 {
                         print("location not updated enough")
-//                        continue
                     }
                     
                     let islastLocationInRegion = currentRegion.contains(CLLocationCoordinate2D(latitude: lastWaypoint.latitude, longitude: lastWaypoint.longitude))
@@ -229,7 +215,6 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
                         notificationService.sendExitedGeofencingZoneNotification(receiverId: currentUserId, target: userId, radius: self.geofenceRadius)
                     }
                 }
-//            }
         }
     }
     

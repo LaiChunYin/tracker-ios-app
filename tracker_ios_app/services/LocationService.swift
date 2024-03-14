@@ -17,12 +17,8 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     private let geoCoder = CLGeocoder()
     private let locationManager = CLLocationManager()
     private var authorizationStatus : CLAuthorizationStatus = .notDetermined
-//    private var currentLocation: CLLocation?
-//    private var locationSnapshots: [Waypoint] = []
     private var uncommittedSnapshots: [Waypoint] = []
-//    private var takeSnapshotTimer: Timer? = nil
     private var saveSnapshotTimer: Timer? = nil
-//    private var snapshotsOfFollowings: [String: [Waypoint]] = [:]
     private var followingListeners: [String: ListenerRegistration] = [:]
     private var isSharing: Bool = false
     
@@ -33,24 +29,11 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
         self.userService.updateFollowingLocationsDelegate = self
         self.locationRepository.locationRepositoryDelegate = self
         
-//        if (CLLocationManager.locationServicesEnabled()){
-//            self.locationManager.delegate = self
-//            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-//        }
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         
         print("before checking permission")
         self.checkPermission()
-        
-//        if (CLLocationManager.locationServicesEnabled() && (self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
-//            self.locationManager.startUpdatingLocation()
-//            
-////            self.takeSnapshotTimer = self.startTakingLocationSnapshots(interval: 5)
-////            self.startSavingSnapshots(interval: 10)
-//        }else{
-//            self.requestPermission()
-//        }
     }
     
     deinit{
@@ -73,7 +56,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
             self.followingListeners.removeValue(forKey: userId)
             
             locationServiceDelegate?.onFollowingRemoved(userId: userId)
-//            self.snapshotsOfFollowings.removeValue(forKey: userId)
         }
         
         for userId in followingToBeAdded {
@@ -98,11 +80,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     }
     
     func requestPermission(){
-//        if (CLLocationManager.locationServicesEnabled()){
-//            print("before request when in use auth")
-////            self.locationManager.requestWhenInUseAuthorization()
-//            self.locationManager.requestAlwaysAuthorization()
-//        }
         print("before request when in use auth")
 //        self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.requestAlwaysAuthorization()
@@ -147,7 +124,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
             print("adding \(locations.count) locations to uncommittedsnapshots")
             self.uncommittedSnapshots.append(contentsOf: waypoints)
         }
-//        locationServiceDelegate?.onSelfLocationUpdated(locations: locations)
         locationServiceDelegate?.onSelfLocationUpdated(waypoints: waypoints)
     }
 
@@ -206,7 +182,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
     
     func addWaypoints(userId: String, waypoints: [Waypoint]) async throws {
         do {
-//            var userIdAndDataTuples: [(String, [AnyHashable: Any])] = []
             var userIdAndDataTuples: [(String, Waypoint)] = []
             
             for location in waypoints {
@@ -249,7 +224,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
             }
         }
         self.saveSnapshotTimer = timer
-//        return timer
     }
     
     // take only the first location within each time interval
@@ -298,8 +272,6 @@ class LocationService: NSObject, CLLocationManagerDelegate, LocationRepositoryDe
         if ((self.authorizationStatus == .authorizedAlways || self.authorizationStatus == .authorizedWhenInUse)){
             self.locationManager.startUpdatingLocation()
             
-//            self.takeSnapshotTimer = self.startTakingLocationSnapshots(interval: 5)
-//            self.startSavingSnapshots(interval: 10)
         }else{
             self.requestPermission()
         }

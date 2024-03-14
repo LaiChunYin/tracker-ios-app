@@ -39,11 +39,6 @@ struct MainView: View {
                 }
                 .tag(2)
                 
-//                SelectedShareView().environmentObject(userViewModel).tabItem {
-//                    Image(systemName: "shareplay")
-//                    Text("Selected Share") //Selected Share
-//                }
-                
             }
             .navigationTitle(userViewModel.currentUser?.userData != nil ? "Welcome, \(userViewModel.currentUser!.userData!.nickName)" : "Logging out")
             .navigationBarTitleDisplayMode(.inline)

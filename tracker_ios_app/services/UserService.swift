@@ -30,7 +30,7 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         print("in auth service update user on change")
         self.currentUser = user
         userServiceDelegate?.onUserInit(user: user)
-//        updateFollowingLocationsDelegate?.onFollowerUpdated(userId: user.identifier)
+
         if let userData = self.currentUser?.userData {
             updateFollowingLocationsDelegate?.onFollowerUpdated(userData: userData)
         }
@@ -42,7 +42,6 @@ class UserService: UserRepositoryDelegate, AuthServiceDelegate, UserDataValidati
         userServiceDelegate?.onUserUpdate(userData: userData)
         
         if let userData = self.currentUser?.userData {
-//            updateFollowingLocationsDelegate?.onFollowerUpdated(userId: user.identifier)
             updateFollowingLocationsDelegate?.onFollowerUpdated(userData: userData)
         }
     }

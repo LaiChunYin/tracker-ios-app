@@ -55,10 +55,6 @@ struct SettingsView: View {
                         
                         VStack{
                             if let img = avatarImage != nil ? resizeImage(image: avatarImage!, targetSize: CGSize(width: 500, height: 500)) : nil {
-                                //                    Image(uiImage: img)
-                                //                        .resizable()
-                                //                        .scaledToFit()
-                                
                                 Image(uiImage: img)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -120,7 +116,6 @@ struct SettingsView: View {
                         Text("10000")
                     }.onChange(of: geofenceRadius) {
                         print("updating geofence radius to \(geofenceRadius)")
-                        //                    locationViewModel.updatingGeofenceRadius(radius: geofenceRadius)
                     }
                 }
                 

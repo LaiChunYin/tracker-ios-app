@@ -80,8 +80,6 @@ struct FollowedByListView: View {
                 }
             }
             .onAppear() {
-//                followedByList = userViewModel.currentUser?.userData?.followedBy.keys.map {$0} ?? []
-                
                 followedByList = userViewModel.currentUser?.userData?.followedBy.sorted {$0.value.connectionTime > $1.value.connectionTime} ?? []
             }
         }

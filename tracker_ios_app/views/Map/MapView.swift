@@ -190,7 +190,6 @@ struct MapView: View {
                     }
                     .popoverTip(MapTip(), arrowEdge: .top)
 
-//                    BottomLeftButtonView(isRecenterMap: $isRecenterMap, isSatelliteMap: $isSatelliteMap, position: $position, share: $share, shareColor: $shareColor)
                     RecenterButtonView(isRecenterMap: $isRecenterMap, position: $position)
                     
                     Button{
@@ -208,7 +207,6 @@ struct MapView: View {
                 }
             }
             .sheet(isPresented: $showLocationDetail) {
-//                LocationDetailsView(waypoint: locationViewModel.locationSnapshots.last!)
                 if let tappedLocation = tappedLocation {
                     LocationDetailsView(waypoint: tappedLocation)
                         .presentationDragIndicator(.visible)

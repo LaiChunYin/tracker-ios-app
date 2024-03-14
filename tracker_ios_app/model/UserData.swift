@@ -10,26 +10,6 @@ import FirebaseFirestoreSwift
 import FirebaseAuth
 import CoreLocation
 
-struct Address: Codable {
-    let street: String
-    let city: String
-    let province: String
-    let country: String
-}
-
-struct Waypoint: Codable, Equatable {
-    let longitude: Double
-    let latitude: Double
-    let time: Date
-    
-    init(location: CLLocation) {
-        print("getting waypoint at \(location.timestamp), now is \(Date.now)")
-        self.longitude = Double(location.coordinate.longitude)
-        self.latitude = Double(location.coordinate.latitude)
-        self.time = location.timestamp
-    }
-}
-
 
 struct UserData: Codable {
 //    @DocumentID var id: String?
@@ -76,10 +56,4 @@ struct AppUser {
         self.accountData = accountData
         self.userData = userData
     }
-    
-//    init(accountData: User, userData: UserData, notifications: [Notification]) {
-//        self.accountData = accountData
-//        self.userData = userData
-//        self.notifications = notifications
-//    }
 }

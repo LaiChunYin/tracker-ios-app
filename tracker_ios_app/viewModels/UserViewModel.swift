@@ -26,7 +26,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         self.userService = userService
         self.locationService = locationService
         
-//        self.authenticationService.authServiceDelegate = self
         self.userService.userServiceDelegate = self
     }
     
@@ -86,10 +85,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         guard password.count >= 8 else {
             throw SignUpError.weakPassword
         }
-//        guard !userRepository.getAllUserNames().contains(email) else {
-//            print("user already exist")
-//            return .failure(SignUpError.alreadyExist)
-//        }
         
         guard !(await userService.checkUserExistence(userId: email)) else {
             print("user already exist")
@@ -116,11 +111,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
 
         do {
             try await userService.follow(followerId: followerId, targetId: targetId)
-            
-//            if var following = currentUser?.userData?.following {
-//                following[targetId] =
-//                currentUser?.userData?.following = following
-//            }
         }
         catch let error {
             print("error in follow")
@@ -139,11 +129,6 @@ class UserViewModel: ObservableObject, UserServiceDelegate {
         
         do {
             try await userService.unfollow(followerId: followerId, targetId: targetId, isRemovingFollower: isRemovingFollower)
-            
-    //        if var following = currentUser?.userData?.following {
-    //            following.removeValue(forKey: targetId)
-    //            currentUser?.userData?.following = following
-    //        }
         }
         catch let error {
             throw error

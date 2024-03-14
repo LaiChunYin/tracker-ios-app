@@ -31,9 +31,6 @@ class LocationRepository {
                     do{
                         print("location docchange is \(docChange.document.data())")
                         let wayPoint = try docChange.document.data(as: Waypoint.self)
-//                        let wayPointId = docChange.document.documentID
-        
-//                        print("getting notification id \(wayPointId) ")
                         
                         let changeType: DataChangeType
                         switch docChange.type {
@@ -44,7 +41,7 @@ class LocationRepository {
                             case.removed:
                                 changeType = .updated
                         }
-//                        self.locationRepositoryDelegate?.onLocationChange(type: changeType, wayPointId: wayPointId, wayPoint: wayPoint)
+
                         self.locationRepositoryDelegate?.onLocationChange(type: changeType, userId: userId, wayPoint: wayPoint)
                         
                     }
@@ -58,7 +55,6 @@ class LocationRepository {
             return locationListener
     }
     
-//    func addWaypoints(userId: String, waypoints: [(String, [AnyHashable: Any])]) async throws {
     func addWaypoints(userId: String, waypoints: [(String, Waypoint)]) async throws {
         guard !waypoints.isEmpty else {
             print("waypoints is empty")
@@ -73,7 +69,6 @@ class LocationRepository {
         do {
             for (userId, newWaypoint) in waypoints {
                 let docRef = self.db.collection(FireBaseCollections.COLLECTION_USER_DATA).document(userId).collection(UserDataSubcollections.COLLECTION_WAYPOINT).document()
-                //            batch.setData(newWaypoint as! [String: Any], forDocument: docRef)
                 try batch.setData(from: newWaypoint, forDocument: docRef)
             }
             

@@ -53,6 +53,7 @@
 		FAC633AC2BA13EC40071CC8B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AB2BA13EC40071CC8B /* GoogleService-Info.plist */; };
 		FAC633B02BA20B610071CC8B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */; };
 		FAC633B42BA242740071CC8B /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC633B32BA242740071CC8B /* SharedViewModel.swift */; };
+		FAC633B62BA356120071CC8B /* Waypoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC633B52BA356120071CC8B /* Waypoints.swift */; };
 		FAD8E5822B8EED3A00F980F8 /* FollowedByListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +122,7 @@
 		FAC633AE2BA209970071CC8B /* tracker-ios-app-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "tracker-ios-app-Info.plist"; sourceTree = SOURCE_ROOT; };
 		FAC633AF2BA20B610071CC8B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAC633B32BA242740071CC8B /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
+		FAC633B52BA356120071CC8B /* Waypoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Waypoints.swift; sourceTree = "<group>"; };
 		FAD8E5812B8EED3A00F980F8 /* FollowedByListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -230,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				FA45FF942B8A539400A126A6 /* UserData.swift */,
+				FAC633B52BA356120071CC8B /* Waypoints.swift */,
 				FA45FF9F2B8BB09400A126A6 /* Notification.swift */,
 				FA8674792B9D513E005E5888 /* Weather.swift */,
 			);
@@ -482,6 +485,7 @@
 				FA45FF262B870F8500A126A6 /* LoginView.swift in Sources */,
 				FA45FF952B8A539400A126A6 /* UserData.swift in Sources */,
 				FA8673EC2B92EC1F005E5888 /* SettingsView.swift in Sources */,
+				FAC633B62BA356120071CC8B /* Waypoints.swift in Sources */,
 				FA45FF982B8A9EC300A126A6 /* Constants.swift in Sources */,
 				FA8673FA2B9A697A005E5888 /* MapTip.swift in Sources */,
 				FA45FF9C2B8AA89500A126A6 /* UserViewModel.swift in Sources */,

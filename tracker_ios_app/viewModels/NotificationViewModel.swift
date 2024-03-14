@@ -42,7 +42,6 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
     
     func onNotificationUpdated(notificationId: String, notification: Notification) {
         DispatchQueue.main.async {
-            //replace existing object with updated one
             print(#function, "notification modified")
             
             let matchedIndex = self.notifications.firstIndex(where: {($0.id?.elementsEqual(notificationId))!})
@@ -56,7 +55,6 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
     
     func onNotificationRemoved(notificationId: String, notification: Notification) {
         DispatchQueue.main.async {
-            //remove object from index in bookList
             print(#function, "Document removed")
             
             let matchedIndex = self.notifications.firstIndex(where: {($0.id?.elementsEqual(notificationId))!})
@@ -111,4 +109,12 @@ class NotificationViewModel: ObservableObject, NotificationInitDelegate, Notific
     func testing(receiverId: String) {
         notificationService.testing(receiverId: receiverId)
     }
+    
+//    func onUserEnteringGeofencingZone(receiverId: String, enteringUserId: String) {
+//        notificationService.sendEnteredGeofencingZoneNotification(receiverId: receiverId, target: enteringUserId, radius: <#Double#>)
+//    }
+//
+//    func onUserEnteringGeofencingZone(receiverId: String, exitingUserId: String) {
+//        notificationService.sendExitedGeofencingZoneNotification(receiverId: receiverId, target: exitingUserId, radius: <#Double#>)
+//    }
 }

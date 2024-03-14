@@ -9,7 +9,6 @@ import SwiftUI
 
 struct FollowingListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
-//    @State private var followings: [String] = []
     @State private var followings: [(key: String, value: UserItemSummary)] = []
     @State private var showAlert: Bool = false
     @State private var sentResult: Result<Void, UserError>? = nil
@@ -78,8 +77,7 @@ struct FollowingListView: View {
             }
             .onAppear() {
                 print("following list appear")
-                
-//                followings = userViewModel.currentUser?.userData?.following.keys.map {$0} ?? []
+            
                 followings = userViewModel.currentUser?.userData?.following.sorted {$0.value.connectionTime > $1.value.connectionTime} ?? []
                 
                 print("following is \(followings)")
