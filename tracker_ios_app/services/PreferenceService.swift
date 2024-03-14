@@ -21,11 +21,27 @@ class PreferenceService {
     
     var geofenceRadiusInMeters: Double {
         get {
-            return UserDefaults.standard.double(forKey: UserDefaultsKeys.GEOFENCE_RADIUS)
+            let value = UserDefaults.standard.double(forKey: UserDefaultsKeys.GEOFENCE_RADIUS)
+            
+            // tolerenance for comparing floating numbers
+            return abs(value) > 1e-8 ? value : 100
         }
         
         set(value) {
             UserDefaults.standard.set(value, forKey: UserDefaultsKeys.GEOFENCE_RADIUS)
+        }
+    }
+    
+    var maxTimeDiffBetween2Points: Double {
+        get {
+            let value = UserDefaults.standard.double(forKey: UserDefaultsKeys.MAX_TIME_DIFF_BTW_2_PTS)
+            
+            // tolerenance for comparing floating numbers
+            return abs(value) > 1e-8 ? value : 60
+        }
+        
+        set(value) {
+            UserDefaults.standard.set(value, forKey: UserDefaultsKeys.MAX_TIME_DIFF_BTW_2_PTS)
         }
     }
 }

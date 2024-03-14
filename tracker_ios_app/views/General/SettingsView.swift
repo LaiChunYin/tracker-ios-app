@@ -18,6 +18,7 @@ struct SettingsView: View {
     @State private var sentResult: Result<Void, UpdateProfileError>? = nil
     @State private var trackingFrequency: Double = 5
     @State private var geofenceRadius: Double = 100
+    @State private var maxTimeDiffBetween2Points: Double = 60
     private var frequencyOptions = [1/30, 2, 5, 10]
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
@@ -109,13 +110,27 @@ struct SettingsView: View {
                     
                     Text("Geofence Radius: \(String(format: "%.2f",geofenceRadius)) meters")
                     
-                    Slider(value: $geofenceRadius, in: 0...10000, step: 1) {
+                    Slider(value: $geofenceRadius, in: 50...10000, step: 1) {
                     } minimumValueLabel: {
-                        Text("0")
+                        Text("50")
                     } maximumValueLabel: {
                         Text("10000")
                     }.onChange(of: geofenceRadius) {
                         print("updating geofence radius to \(geofenceRadius)")
+                    }
+                }
+                
+                VStack {
+                    
+                    Text("Draw new path if disconnected for more than \(String(format: "%.0f" ,maxTimeDiffBetween2Points)) seconds")
+                    
+                    Slider(value: $maxTimeDiffBetween2Points, in: 1...3600, step: 1) {
+                    } minimumValueLabel: {
+                        Text("1")
+                    } maximumValueLabel: {
+                        Text("3600")
+                    }.onChange(of: maxTimeDiffBetween2Points) {
+                        print("updating maxTimeDiffBetween2Points to \(maxTimeDiffBetween2Points)")
                     }
                 }
                 
@@ -130,7 +145,8 @@ struct SettingsView: View {
                     Task {
                         do {
                             print("saving geofence radius \(geofenceRadius)")
-                            locationViewModel.updatingGeofenceRadius(radius: geofenceRadius)
+                            locationViewModel.updateGeofenceRadius(radius: geofenceRadius)
+                            locationViewModel.updateMaxTimeDiffBetween2Points(timeDiff: maxTimeDiffBetween2Points)
                             
                             // compress the image to low quality, a firestore document cannot exceed 1 Mb
                             let imgData = avatarImage != nil ? resizeImage(image: avatarImage!, targetSize: CGSize(width: 500, height: 500) ).jpegData(compressionQuality: 0) : nil
@@ -193,6 +209,7 @@ struct SettingsView: View {
                 self.avatarImage = UIImage(data: imgData)
                 
                 self.geofenceRadius = locationViewModel.geofenceRadius
+                self.maxTimeDiffBetween2Points = locationViewModel.maxTimeDiffBetween2Points
             }
         }
     }

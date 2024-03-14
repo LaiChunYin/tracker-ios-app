@@ -18,7 +18,9 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     private var weatherService: WeatherService
     private var notificationService: NotificationService
     private var preferenceService: PreferenceService
-    private let maxTimeDiffBetween2Points: Double = 60
+    var maxTimeDiffBetween2Points: Double {
+        preferenceService.maxTimeDiffBetween2Points
+    }
     var geofenceRadius: Double {
         preferenceService.geofenceRadiusInMeters
     }
@@ -103,7 +105,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         }
         
         if let (userId, _, _) = self.currentUserGeofence {
-            self.currentUserGeofence = (userId, CLLocationCoordinate2D(latitude: self.currentLocation!.latitude, longitude: self.currentLocation!.longitude), CLLocationDistance(preferenceService.geofenceRadiusInMeters))
+            self.currentUserGeofence = (userId, CLLocationCoordinate2D(latitude: self.currentLocation!.latitude, longitude: self.currentLocation!.longitude), CLLocationDistance(geofenceRadius))
         }
     }
     
@@ -173,7 +175,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     
     func startGeofencingCurrentUser(userId: String) {
         let center = self.currentLocation
-        let radius = preferenceService.geofenceRadiusInMeters
+        let radius = geofenceRadius
         self.currentUserGeofence = (userId, CLLocationCoordinate2D(latitude: center!.latitude, longitude: center!.longitude), CLLocationDistance(radius))
     }
     
@@ -225,7 +227,11 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
         self.previousGeofenceOfUsers = [:]
     }
     
-    func updatingGeofenceRadius(radius: Double) {
+    func updateGeofenceRadius(radius: Double) {
         preferenceService.geofenceRadiusInMeters = radius
+    }
+
+    func updateMaxTimeDiffBetween2Points(timeDiff: Double) {
+        preferenceService.maxTimeDiffBetween2Points = timeDiff
     }
 }

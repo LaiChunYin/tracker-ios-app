@@ -35,6 +35,7 @@ enum MainViewTabs {
 struct UserDefaultsKeys {
     static let REMEMBER_ME = "REMEMBER_ME"
     static let GEOFENCE_RADIUS = "GEOFENCE_RADIUS"
+    static let MAX_TIME_DIFF_BTW_2_PTS = "MAX_TIME_DIFF_BTW_2_PTS"
 }
 
 struct FireBaseCollections {
