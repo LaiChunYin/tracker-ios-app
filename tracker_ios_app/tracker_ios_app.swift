@@ -87,6 +87,7 @@ struct tracker_ios_app: App {
             ContentView().environmentObject(userViewModel).environmentObject(notificationViewModel)
                 .environmentObject(locationViewModel)
                 .environmentObject(sharedViewModel)
+                .preferredColorScheme(.dark)
         }
     }
 }
