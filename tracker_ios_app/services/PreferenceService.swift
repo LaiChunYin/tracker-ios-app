@@ -19,4 +19,13 @@ class PreferenceService {
         }
     }
     
+    var geofenceRadiusInMeters: Double {
+        get {
+            return UserDefaults.standard.double(forKey: UserDefaultsKeys.GEOFENCE_RADIUS)
+        }
+        
+        set(value) {
+            UserDefaults.standard.set(value, forKey: UserDefaultsKeys.GEOFENCE_RADIUS)
+        }
+    }
 }

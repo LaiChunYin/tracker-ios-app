@@ -101,6 +101,26 @@ class NotificationService: NotificationRepositoryDelegate {
         }
     }
     
+    func sendEnteredGeofencingZoneNotification(receiverId: String, target: String, radius: Double) {
+        do{
+            let notification = Notification(type: .enteredRegion, extraData: ["target": target, "radius": String(format: "%.2f", radius)])
+            self.sendNotification(receiverId: receiverId, notification: notification)
+        }
+        catch let err as NSError{
+            print(#function, "Unable to add document to firestore : \(err)")
+        }
+    }
+    
+    func sendExitedGeofencingZoneNotification(receiverId: String, target: String, radius: Double) {
+        do{
+            let notification = Notification(type: .exitedRegion, extraData: ["target": target, "radius": String(format: "%.2f", radius)])
+            self.sendNotification(receiverId: receiverId, notification: notification)
+        }
+        catch let err as NSError{
+            print(#function, "Unable to add document to firestore : \(err)")
+        }
+    }
+    
     func actionDone(userId: String, notificationId: String) {
         notificationRepository.updateNotification(userId: userId, notificationId: notificationId, newData: [NotificationFields.ACTION_TAKEN: true])
     }

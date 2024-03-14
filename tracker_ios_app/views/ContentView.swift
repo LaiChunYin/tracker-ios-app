@@ -67,10 +67,23 @@ struct ContentView: View {
                                         print("going to notifications")
                                         rootScreen = .notifications
                                     } label: {
-                                        Image(systemName: "bell.fill")
-                                            .padding(4)
-                                            .background(.ultraThinMaterial)
-                                            .clipShape(.circle)
+                                        ZStack(alignment: .topTrailing) {
+                                            Image(systemName: "bell.fill")
+                                                .padding(4)
+                                                .background(.ultraThinMaterial)
+                                                .clipShape(.circle)
+                                            
+                                            if let unreadNumber = notificationViewModel.notifications.count > 0 ? notificationViewModel.notifications.filter({ !$0.read }).count : nil, unreadNumber > 0 {
+                                                Text("\(unreadNumber <= 99 ? "\(unreadNumber)" : "99+")")
+                                                    .font(.caption2)
+                                                    .fontWeight(.bold)
+                                                    .foregroundColor(.white)
+                                                    .frame(width: 20, height: 20)
+                                                    .background(Color.red)
+                                                    .clipShape(Circle())
+                                                    .offset(x: 10, y: -10)
+                                            }
+                                        }
                                     }
                                 case .notifications:
                                     Button {

@@ -17,6 +17,8 @@ enum NotificationTypes: Codable {
     case invitationAccepted
     case invitationRejected
     case subscriberRemoved
+    case enteredRegion
+    case exitedRegion
 }
 
 enum RootViews {
@@ -26,6 +28,7 @@ enum RootViews {
 
 struct UserDefaultsKeys {
     static let REMEMBER_ME = "REMEMBER_ME"
+    static let GEOFENCE_RADIUS = "GEOFENCE_RADIUS"
 }
 
 struct FireBaseCollections {

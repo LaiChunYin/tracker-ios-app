@@ -10,12 +10,14 @@ import PhotosUI
 
 struct SettingsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject var locationViewModel: LocationViewModel
     @State private var nickName: String = ""
     @State private var avatarItem: PhotosPickerItem?
     @State private var avatarImage: UIImage?
     @State private var showAlert: Bool = false
     @State private var sentResult: Result<Void, UpdateProfileError>? = nil
     @State private var trackingFrequency: Double = 5
+    @State private var geofenceRadius: Double = 100
     private var frequencyOptions = [1/30, 2, 5, 10]
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
@@ -107,6 +109,21 @@ struct SettingsView: View {
                  }
                  .padding([.horizontal, .top])
                 
+                VStack {
+                    
+                    Text("Geofence Radius: \(String(format: "%.2f",geofenceRadius)) meters")
+                    
+                    Slider(value: $geofenceRadius, in: 0...10000, step: 1) {
+                    } minimumValueLabel: {
+                        Text("0")
+                    } maximumValueLabel: {
+                        Text("10000")
+                    }.onChange(of: geofenceRadius) {
+                        print("updating geofence radius to \(geofenceRadius)")
+                        //                    locationViewModel.updatingGeofenceRadius(radius: geofenceRadius)
+                    }
+                }
+                
 //                Picker("Location Update Frequency", selection: $trackingFrequency) {
 //                    ForEach(frequencyOptions, id: \.self) { freq in
 //                        Text("\(freq) min").tag(freq)
@@ -117,6 +134,9 @@ struct SettingsView: View {
                 Button {
                     Task {
                         do {
+                            print("saving geofence radius \(geofenceRadius)")
+                            locationViewModel.updatingGeofenceRadius(radius: geofenceRadius)
+                            
                             // compress the image to low quality, a firestore document cannot exceed 1 Mb
                             let imgData = avatarImage != nil ? resizeImage(image: avatarImage!, targetSize: CGSize(width: 500, height: 500) ).jpegData(compressionQuality: 0) : nil
                             print("image size after \(imgData?.count) bytes")
@@ -143,7 +163,7 @@ struct SettingsView: View {
                 .alert(isPresented: $showAlert) {
                     switch sentResult {
                     case .success:
-                        return Alert(title: Text("Update Successful"), message: Text("Nick Name and Profile pic have been updated."))
+                        return Alert(title: Text("Update Successful"), message: Text("Nick Name, Profile pic and other settings have been updated."))
                     case .none:
                         return Alert(title: Text("Unknown"), message: Text("Unknown"))
                     case .failure(let error):
@@ -176,6 +196,8 @@ struct SettingsView: View {
                 
                 // Create UIImage from Data
                 self.avatarImage = UIImage(data: imgData)
+                
+                self.geofenceRadius = locationViewModel.geofenceRadius
             }
         }
     }

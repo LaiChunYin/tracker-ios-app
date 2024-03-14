@@ -48,6 +48,12 @@ struct MapView: View {
             Map(position: $position){
                 
                 if showMapAnnotation && userViewModel.currentUser != nil {
+                    if let (_, center, radius) = locationViewModel.currentUserGeofence {
+                        MapCircle(center: center, radius: radius)
+                            .foregroundStyle(.yellow.opacity(0.3))
+                    }
+                    
+                    
                     // Path of the current user
                     if showPath {
                         MapPolyline(coordinates: locationViewModel.locationSnapshots.sorted { $0.time < $1.time }.map {CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)})
@@ -117,9 +123,30 @@ struct MapView: View {
                     }
                     
                     Button {
-                        showPath.toggle()
+                        if locationViewModel.currentUserGeofence == nil {
+                            print("start geofencing")
+                            locationViewModel.startGeofencingCurrentUser(userId: userViewModel.currentUser!.identifier)
+                        }
+                        else {
+                            print("stop geofencing")
+                            locationViewModel.stopGeofencingCurrentUser()
+                        }
                     } label: {
                         Image(systemName: "mappin.and.ellipse")
+                            .font(.largeTitle)
+                            .foregroundColor(locationViewModel.currentUserGeofence != nil ? .green : .red)
+                            .imageScale(.small)
+                            .padding(10)
+                            .background(.ultraThinMaterial)
+                            .clipShape(.circle)
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 5)
+                    }
+
+                    Button {
+                        showPath.toggle()
+                    } label: {
+                        Image(systemName: "pencil.and.outline")
                             .font(.largeTitle)
                             .foregroundColor(showPath ? .green : .red)
                             .imageScale(.small)

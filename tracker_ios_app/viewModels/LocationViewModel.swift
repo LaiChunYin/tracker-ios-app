@@ -17,16 +17,26 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     @Published var displayingLocation: Waypoint? = nil
     private var locationService: LocationService
     private var weatherService: WeatherService
+    private var notificationService: NotificationService
+    private var preferenceService: PreferenceService
     private let maxTimeDiffBetween2Points: Double = 60
+    var geofenceRadius: Double {
+        preferenceService.geofenceRadiusInMeters
+    }
+    @Published var currentUserGeofence: (String, CLLocationCoordinate2D, CLLocationDistance)? = nil  // (current user id, current user's location, radius of geofence zone)
+//    private var previousUserGeofence: (String, CLLocationCoordinate2D, CLLocationDistance)? = nil // this is for detecting user enter/exit events
+    private var previousGeofenceOfUsers: [String: (String, CLLocationCoordinate2D, CLLocationDistance)] = [:] // this is for detecting user enter/exit events
     
     
 //    init(currentLocation: CLLocation, locationSnapshots: [Waypoint], snapshotsOfFollowings: [String : [Waypoint]], locationService: LocationService) {
-    init(locationService: LocationService, weatherService: WeatherService) {
+    init(locationService: LocationService, weatherService: WeatherService, notificationService: NotificationService, preferenceService: PreferenceService) {
 //        self.currentLocation = currentLocation
 //        self.locationSnapshots = locationSnapshots
 //        self.snapshotsOfFollowings = snapshotsOfFollowings
         self.locationService = locationService
         self.weatherService = weatherService
+        self.notificationService = notificationService
+        self.preferenceService = preferenceService
         
         self.locationService.locationServiceDelegate = self
         print("after loc view model init")
@@ -90,7 +100,7 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
 //        self.locationSnapshots.append(contentsOf: waypoints)
         print("before keeping self locations: \(self.locationSnapshots.count)")
         self.locationSnapshots = self.keepOnlyLatestLocations(originalWaypoints: self.locationSnapshots, newWaypoints: waypoints, timeRange: maxTimeDiffBetween2Points)
-        print("before keeping self locations: \(self.locationSnapshots.count)")
+        print("after keeping self locations: \(self.locationSnapshots.count)")
         
         if waypoints.last != nil{
             //most recent
@@ -103,6 +113,10 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
             
             self.currentLocation = waypoints.first!
         }
+        
+        if let (userId, _, _) = self.currentUserGeofence {
+            self.currentUserGeofence = (userId, CLLocationCoordinate2D(latitude: self.currentLocation!.latitude, longitude: self.currentLocation!.longitude), CLLocationDistance(preferenceService.geofenceRadiusInMeters))
+        }
     }
     
     func onLocationAdded(userId: String, waypoint: Waypoint) {
@@ -113,6 +127,11 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
             waypoints = self.keepOnlyLatestLocations(originalWaypoints: waypoints, newWaypoints: [waypoint], timeRange: maxTimeDiffBetween2Points)
             print("after keeping locations: \(waypoints.count)")
             self.snapshotsOfFollowings[userId] = waypoints
+            
+            if self.currentUserGeofence != nil {
+                self.checkUserInGeofenceRegion(userId: userId)
+                self.previousGeofenceOfUsers[userId] = self.currentUserGeofence
+            }
         }
         print("after adding location")
     }
@@ -162,5 +181,66 @@ class LocationViewModel: ObservableObject, LocationServiceDelegate {
     func focusAt(location: Waypoint?) {
         print("changing focus")
         displayingLocation = location
+    }
+    
+    func startGeofencingCurrentUser(userId: String) {
+        let center = self.currentLocation
+        let radius = preferenceService.geofenceRadiusInMeters
+        self.currentUserGeofence = (userId, CLLocationCoordinate2D(latitude: center!.latitude, longitude: center!.longitude), CLLocationDistance(radius))
+    }
+    
+    /*
+     Detect Enter/Exit by checking if the previous location was in the previous region and if the current location is in the current location
+     Limitations:
+     1. if the current user or the following user moves too fast, the following user may be cutting through the region without being detected
+     */
+    func checkUserInGeofenceRegion(userId: String) {
+            if let (currentUserId, center, radius) = self.currentUserGeofence {
+                print("checking region \(center), \(radius)")
+                var previousRegion: CLCircularRegion? = nil
+                
+                let currentRegion = CLCircularRegion(center: center, radius: radius, identifier: "currentUserGeofence")
+                
+                if let (_, center, radius) = self.previousGeofenceOfUsers[userId] {
+                    print("checking previous region, \(center), \(radius)")
+                    previousRegion = CLCircularRegion(center: center, radius: radius, identifier: "previousUserGeofence")
+                }
+                
+//                for (userId, waypoints) in snapshotsOfFollowings {
+                if let waypoints = self.snapshotsOfFollowings[userId], let lastWaypoint = waypoints.last {
+                    let secondLastWaypoint: Waypoint? = waypoints[waypoints.count - 2]
+                    if Double(Int(lastWaypoint.time.timeIntervalSinceNow) % 60) >= 20 {
+                        print("location not updated enough")
+//                        continue
+                    }
+                    
+                    let islastLocationInRegion = currentRegion.contains(CLLocationCoordinate2D(latitude: lastWaypoint.latitude, longitude: lastWaypoint.longitude))
+                    
+                    let isSecondLastLocationInRegion = secondLastWaypoint != nil && previousRegion != nil ? previousRegion!.contains(CLLocationCoordinate2D(latitude: secondLastWaypoint!.latitude, longitude: secondLastWaypoint!.longitude)) : false
+                    
+                    print("is in region? \(islastLocationInRegion), \(isSecondLastLocationInRegion)")
+                    
+                    if islastLocationInRegion && !isSecondLastLocationInRegion {
+                        print("entering region")
+                        notificationService.sendEnteredGeofencingZoneNotification(receiverId: currentUserId, target: userId, radius: self.geofenceRadius)
+                    }
+                    if !islastLocationInRegion && isSecondLastLocationInRegion {
+                        print("exiting region")
+                        notificationService.sendExitedGeofencingZoneNotification(receiverId: currentUserId, target: userId, radius: self.geofenceRadius)
+                    }
+                }
+//            }
+        }
+    }
+    
+    func stopGeofencingCurrentUser() {
+        print("stop geofencing")
+        self.currentUserGeofence = nil
+//        self.previousUserGeofence = nil
+        self.previousGeofenceOfUsers = [:]
+    }
+    
+    func updatingGeofenceRadius(radius: Double) {
+        preferenceService.geofenceRadiusInMeters = radius
     }
 }

@@ -76,7 +76,7 @@ struct tracker_ios_app: App {
         self.sharedViewModel = SharedViewModel()
         self.userViewModel = UserViewModel(authenticationService: authenticationService, preferenceService: preferenceService, userService: userService, locationService: locationService)
         self.notificationViewModel = NotificationViewModel(userService: userService, notificationService: notificationService, authenticationService: authenticationService)
-        self.locationViewModel = LocationViewModel(locationService: locationService, weatherService: weatherService)
+        self.locationViewModel = LocationViewModel(locationService: locationService, weatherService: weatherService, notificationService: notificationService, preferenceService: preferenceService)
         
         authenticationService.autoSignInIfEnabled()
     }

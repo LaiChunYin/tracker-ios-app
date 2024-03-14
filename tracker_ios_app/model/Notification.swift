@@ -53,6 +53,12 @@ struct Notification: Codable, Identifiable {
             case .subscriberRemoved:
                 self.title = "Follow Permission Removed"
                 self.content = "User \\(target) has removed you from the follower list."
+            case .enteredRegion:
+                self.title = "User Entered Region"
+                self.content = "User \\(target) entered your geofencing zone of \\(radius) meters radius"
+            case .exitedRegion:
+                self.title = "User Exited Region"
+                self.content = "User \\(target) exited your geofencing zone of \\(radius) meters radius"
             case .testing:
                 self.title = "testing"
                 self.content = "Remove this later"

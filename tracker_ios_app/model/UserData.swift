@@ -36,6 +36,7 @@ struct UserData: Codable {
     var isConnected: Bool = false
     var nickName: String = ""
     var profilePic: String = ""
+//    var geofencingRadius: Int = 0
     var following: [String: UserItemSummary] = [:]
     var followedBy: [String: UserItemSummary] = [:]
     
